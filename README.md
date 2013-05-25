@@ -6,7 +6,7 @@ https://www.zabbix.com/forum/showthread.php?t=37480
 
 -  Put the files to the root folder of Zabbix PHP Frontend
 -  Edit include/menu.inc.php:
-After:
+	After:
 		
 		array(
 			'url' => 'maps.php',
@@ -14,7 +14,7 @@ After:
 			'sub_pages' => array('map.php')
 		),
 
-Add:
+	Add:
 		
 		array(
 			'url' => 'map_ya_ro.php',
@@ -22,7 +22,7 @@ Add:
 			'sub_pages' => array('map_ya_ro.php')
 		),
 
-After: 
+	After: 
 		
 		array(
 			'url' => 'sysmaps.php',
@@ -30,7 +30,7 @@ After:
 			'sub_pages' => array('image.php', 'sysmap.php')
 		),
 	
-Add:
+	Add:
 		
 		array(
 			'url' => 'map_ya_rw.php',
@@ -43,7 +43,8 @@ Add:
 		// templates
 		'sysmap.tpl.js' => 'templates/',
 		
-Add this (probably you need to add the coma above too):
+	Add this (probably you need to add the coma above too):
+		
 		// YaMaps
 		'yamaps_functions.js' => 'yamaps',
 		'yamaps_functions_rw.js' => 'yamaps/'

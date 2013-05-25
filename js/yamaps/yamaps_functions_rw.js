@@ -23,6 +23,7 @@ function init(def_lat, def_lon, def_zoom, MapType, PrioProblem) {
 		maxZoom : 9
 	});
 	SetSelect(document.getElementById("selectgroup"), "Все");
+	
 	SaveButton = new ymaps.control.Button({
 		data : {
 			content : 'Сохранить',

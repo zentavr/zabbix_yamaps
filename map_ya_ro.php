@@ -19,11 +19,11 @@ insert_js("
 	var h = jQuery(window).height() - 180;
 	document.write('<div id=\"map\" style=\"width:100%; height:' + h + 'px\"></div>');
 
-	var def_lat     = ".$MYLATLON['lat'].";
-	var def_lon     = ".$MYLATLON['lon'].";
-	var def_zoom    = ".$MYZOOM."; 
-	var MapType     = '".$MAPTYPE."';
-	var PrioProblem = ".$PRIOPROBLEM.";
+	ZabbixYaMap.def_lat     = ".$MYLATLON['lat'].";
+	ZabbixYaMap.def_lon     = ".$MYLATLON['lon'].";
+	ZabbixYaMap.def_zoom    = ".$MYZOOM."; 
+	ZabbixYaMap.MapType     = '".$MAPTYPE."';
+	ZabbixYaMap.PrioProblem = ".$PRIOPROBLEM.";
 ");
 ?>
 <!-- Load YandexMaps JS Classes -->

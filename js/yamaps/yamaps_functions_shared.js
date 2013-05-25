@@ -6,8 +6,32 @@ var ZabbixYaMap = {
 		MapType     : undefined,
 		PrioProblem : undefined,
 		
-		/* Functions */
+		Map         : undefined,
 		
+		/* Functions */
+		init : function() {
+			ZabbixYaMap.Map = new ymaps.Map('map', {
+				center : [ ZabbixYaMap.def_lat, ZabbixYaMap.def_lon ],
+				zoom : ZabbixYaMap.def_zoom,
+				type : 'yandex#' + ZabbixYaMap.MapType,
+				behaviors : [ 'default', 'scrollZoom' ]
+			});
+
+			ZabbixYaMap.Map.controls
+			        .add('zoomControl')
+			        .add('typeSelector')
+			        .add('mapTools')
+					.add(new ymaps.control.ScaleLine())
+					.add(new ymaps.control.SearchControl({
+								provider : 'yandex#' + ZabbixYaMap.MapType,
+								left : '40px',
+								top : '10px',
+								useMapBounds : true
+							}))
+					.add(new ymaps.control.MiniMap({
+								type : 'yandex#' + ZabbixYaMap.MapType
+					}));
+		},
 		auth : function() {
 			var cookie = " " + document.cookie;
 			var search = " zbx_sessionid=";

@@ -8,7 +8,7 @@ function initRO() {
 
 	ProblemArray = new ymaps.GeoObjectCollection();
 
-	SetSelect(document.getElementById("selectgroup"), "Все");
+	ZabbixYaMap.SetSelect(document.getElementById("selectgroup"), "Все");
 
 	problems();
 
@@ -251,42 +251,6 @@ function problems() {
 	};
 }
 
-function SetSelect(htmlSelect, selected) {
-	var jsonReq;
-	if (window.XMLHttpRequest) {
-		jsonReq = new XMLHttpRequest();
-		jsonReq.overrideMimeType('text/xml');
-	} else if (window.ActiveXObject) {
-		jsonReq = new ActiveXObject("Microsoft.XMLHTTP");
-	}
-	jsonReq.overrideMimeType('application/json');
-	var url = "api_jsonrpc.php";
-	jsonReq.open('POST', url, true);
-	jsonReq.setRequestHeader("Content-Type", "application/json");
-	var query = '{"jsonrpc":"2.0","method":"hostgroup.getobjects","params":{},"auth":"'
-			+ ZabbixYaMap.auth() + '","id":1}';
-	jsonReq.send(query);
-	jsonReq.onreadystatechange = function alertContents() {
-		if (jsonReq.readyState === 4) {
-			if (jsonReq.status === 200) {
-				var out = JSON.parse(jsonReq.responseText);
-				opt = new Option("Все", 0);
-				opt.selected = "selected";
-				htmlSelect.options.add(opt, 0);
-				for (i = 0; i < out.result.length; i++) {
-					opt = new Option(out.result[i].name, out.result[i].groupid);
-					if (out.result[i].name === selected) {
-						opt.selected = "selected";
-					}
-					htmlSelect.options.add(opt, i + 1);
-				}
-				return true;
-			}
-			return (100);
-		}
-		return (99);
-	};
-}
 
 function ChangeGroup() {
 	                var sel = document.getElementById("selectgroup");

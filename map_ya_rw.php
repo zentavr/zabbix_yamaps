@@ -31,7 +31,9 @@ include_once('include/page_header.php');
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
         <script src="http://api-maps.yandex.ru/2.0/?load=package.full&lang=ru-RU" type="text/javascript"></script>
-        <script src="http://yandex.st/jquery/1.6.4/jquery.min.js" type="text/javascript"></script>
+        <!-- jQuery is already loaded by Zabbix 2.0.6
+        	<script src="http://yandex.st/jquery/1.6.4/jquery.min.js" type="text/javascript"></script>
+        -->
         <script type="text/javascript">
             document.write('<select id="selectgroup" onChange="ChangeGroup();"></select>');
             var h = jQuery(window).height() - 180;

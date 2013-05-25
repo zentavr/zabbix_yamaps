@@ -73,12 +73,13 @@ function draghost(id, newpoint) {
 /* Fetch the Host Groups */
 function SetSelect(htmlSelect, selected) {
 	console.info(arguments);
-	$.ajax({
+	jQuery.ajax({
 		url: "api_jsonrpc.php",
 		type: "POST",
 		contentType: "application/json",
 		processData : false,
 		async: false,
+		dataType: "json",
 		data: '{"jsonrpc":"2.0","method":"hostgroup.getobjects","params":{},"auth":"' + ZabbixYaMap.auth() + '","id":1}',
 		success : function(data, textStatus, jqXHR) {
 				console.log(arguments);
@@ -98,7 +99,10 @@ function SetSelect(htmlSelect, selected) {
                 */
 		},
 		error : function( jqXHR, textStatus, errorThrown ) {
-			alert('Cannot load host groups: ' + textStatus);
+			alert("Cannot load host groups\n\n" + 
+					"Code: " + jqXHR.status + "\n" +
+					"Status: " + jqXHR.statusText + "\n" +
+					"Response: " + jqXHR.responseText);
 		}
 	});
 

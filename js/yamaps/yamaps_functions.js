@@ -1,85 +1,95 @@
 
 function init(def_lat, def_lon, def_zoom, MapType, PrioProblem) {
-                console.log(arguments);
-                minseverity = 0;
-                ZabbixMap = new ymaps.Map('map', {
-                    center: [def_lat, def_lon],
-                    zoom: def_zoom,
-                    type: 'yandex#' + MapType,
-                    behaviors: ['default', 'scrollZoom']
-                });
-                ZabbixMap.controls
-                        .add('zoomControl')
-                        .add('typeSelector')
-                        .add('mapTools')
-                        .add(new ymaps.control.ScaleLine())
-                        .add(new ymaps.control.SearchControl({
-			                    provider: 'yandex#' + MapType,
-			                    left: '40px',
-			                    top: '10px',
-			                    useMapBounds: true
-			                }))
-                        .add(new ymaps.control.MiniMap({
-                    type: 'yandex#' + MapType
-                }));
-                HostArray = new ymaps.Clusterer({
-                    maxZoom: 17
-                });
-                ProblemArray = new ymaps.GeoObjectCollection();
-                SetSelect(document.getElementById("selectgroup"), "Все");
-                problems();
-                interval = setInterval(function() {
-                    problems();
-                }, 60000);
-                var UpdateListBox = new ymaps.control.ListBox({
-                    data: {
-                        title: 'Обновлять каждые 60сек'
-                    },
-                    items: [
-                        new ymaps.control.ListBoxItem({
-                            data: {
+	console.log(arguments);
+	minseverity = 0;
+	ZabbixMap = new ymaps.Map('map', {
+		center: [def_lat, def_lon],
+		zoom: def_zoom,
+		type: 'yandex#' + MapType,
+		behaviors: ['default', 'scrollZoom']
+	});
+	
+	ZabbixMap.controls
+    	.add('zoomControl')
+        .add('typeSelector')
+        .add('mapTools')
+        .add(new ymaps.control.ScaleLine())
+        .add(new ymaps.control.SearchControl({
+				provider: 'yandex#' + MapType,
+			    left: '40px',
+			    top: '10px',
+			    useMapBounds: true
+			}))
+		.add(new ymaps.control.MiniMap({
+                type: 'yandex#' + MapType
+        }));
+
+	HostArray = new ymaps.Clusterer({
+		maxZoom: 17
+    });
+	
+    ProblemArray = new ymaps.GeoObjectCollection();
+    
+    SetSelect(document.getElementById("selectgroup"), "Все");
+    
+    problems();
+
+    interval = setInterval(function() {
+    	problems();
+    }, 60000);
+
+    var UpdateListBox = new ymaps.control.ListBox({
+    	data: { title: 'Обновлять каждые 60сек' },
+    	items: [
+    	        	new ymaps.control.ListBoxItem({
+    	        		data: {
                                 time: 10,
                                 content: '10 секунд'}}),
-                        new ymaps.control.ListBoxItem({
-                            data: {
+                    new ymaps.control.ListBoxItem({
+                        data: {
                                 time: 30,
                                 content: '30 секунд'}}),
-                        new ymaps.control.ListBoxItem({
-                            data: {
+                    new ymaps.control.ListBoxItem({
+                        data: {
                                 time: 60,
                                 content: '60 секунд'}}),
-                        new ymaps.control.ListBoxItem({
-                            data: {
+                    new ymaps.control.ListBoxItem({
+                        data: {
                                 time: 120,
                                 content: '120 секунд'}}),
-                        new ymaps.control.ListBoxItem({
-                            data: {
+                    new ymaps.control.ListBoxItem({
+                        data: {
                                 time: 600,
                                 content: '600 секунд'}}),
-                        new ymaps.control.ListBoxItem({
-                            data: {
+                    new ymaps.control.ListBoxItem({
+                        data: {
                                 time: 900,
                                 content: '900 секунд'}}),
                     ]
                 },
-                {
-                    position: {
-                        top: 5,
-                        right: 200}
-                });
-                for (var i = 0; i < UpdateListBox.length(); i++) {
-                    (function(i) {
-                        UpdateListBox.get(i).events.add('click', function() {
-                            clearInterval(interval);
-                            interval = setInterval(function() {
-                                problems();
-                            }, UpdateListBox.get(i).data.get('time') * 1000);
-                            UpdateListBox.collapse();
-                            UpdateListBox.setTitle('Обновлять каждые ' + UpdateListBox.get(i).data.get('time') + 'сек');
-                        });
-                    })(i);
-                }
-                ZabbixMap.controls.add(UpdateListBox);
+        {
+                position: {
+                	top: 5,
+                    right: 200}
+        }
+    );
+
+    for (var i = 0; i < UpdateListBox.length(); i++) {
+    	(function(i) {
+        	UpdateListBox.get(i).events.add('click', function() {
+            	clearInterval(interval);
+                interval = setInterval(function() {
+                		problems();
+                	}, 
+                	UpdateListBox.get(i).data.get('time') * 1000
+                );
+                UpdateListBox.collapse();
+                UpdateListBox.setTitle('Обновлять каждые ' + UpdateListBox.get(i).data.get('time') + 'сек');
+             });
+        })(i);
+	}
+    
+    ZabbixMap.controls.add(UpdateListBox);
                 var MinseverityListBox = new ymaps.control.ListBox({
                     data: {
                         title: 'Показать все проблемы'
@@ -146,7 +156,7 @@ function init(def_lat, def_lon, def_zoom, MapType, PrioProblem) {
                 });
                 ZabbixMap.controls.add(FollowProblem);
                 ChangeGroup();
-            }
+}
 
 function auth() {
 	var cookie = " " + document.cookie;

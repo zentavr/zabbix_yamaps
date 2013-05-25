@@ -1,49 +1,45 @@
 function init(def_lat, def_lon, def_zoom, MapType, PrioProblem) {
-            	ZabbixMap = new ymaps.Map('map', {
-            		center: [def_lat, def_lon],
-            		zoom: def_zoom,
-            		type: 'yandex#' + MapType,
-            		behaviors: ['default', 'scrollZoom']
-            	});
-            	
-            	ZabbixMap.controls
-                	.add('zoomControl')
-                    .add('typeSelector')
-                    .add('mapTools')
-                    .add(new ymaps.control.ScaleLine())
-                    .add(new ymaps.control.SearchControl({
-            				provider: 'yandex#' + MapType,
-            			    left: '40px',
-            			    top: '10px',
-            			    useMapBounds: true
-            			}))
-            		.add(new ymaps.control.MiniMap({
-                            type: 'yandex#' + MapType
-                    }));
-                
-                Hosts = [];
-                ChangeHost = [];
-                HostArray = new ymaps.Clusterer({
-                    maxZoom: 9
-                });
-                SetSelect(document.getElementById("selectgroup"), "Все");
-                SaveButton = new ymaps.control.Button({
-                    data: {
-                        content: 'Сохранить',
-                        title: 'Нажмите для сохранения'
-                    }
-                },
-                {
-                    position: {
-                        top: 5,
-                        right: 200},
-                    selectOnClick: false
-                });
-                SaveButton.disable();
-                ZabbixMap.controls.add(SaveButton);
-                saved = false;
-                ChangeGroup();
-            }
+	ZabbixMap = new ymaps.Map('map', {
+		center : [ def_lat, def_lon ],
+		zoom : def_zoom,
+		type : 'yandex#' + MapType,
+		behaviors : [ 'default', 'scrollZoom' ]
+	});
+
+	ZabbixMap.controls.add('zoomControl').add('typeSelector').add('mapTools')
+			.add(new ymaps.control.ScaleLine()).add(
+					new ymaps.control.SearchControl({
+						provider : 'yandex#' + MapType,
+						left : '40px',
+						top : '10px',
+						useMapBounds : true
+					})).add(new ymaps.control.MiniMap({
+				type : 'yandex#' + MapType
+			}));
+
+	Hosts = [];
+	ChangeHost = [];
+	HostArray = new ymaps.Clusterer({
+		maxZoom : 9
+	});
+	SetSelect(document.getElementById("selectgroup"), "Все");
+	SaveButton = new ymaps.control.Button({
+		data : {
+			content : 'Сохранить',
+			title : 'Нажмите для сохранения'
+		}
+	}, {
+		position : {
+			top : 5,
+			right : 200
+		},
+		selectOnClick : false
+	});
+	SaveButton.disable();
+	ZabbixMap.controls.add(SaveButton);
+	saved = false;
+	ChangeGroup();
+}
 
 function save_change() {
 	for (var i = 0; i < ChangeHost.length; i++) {
@@ -59,7 +55,7 @@ function save_change() {
         var url = "api_jsonrpc.php";
         jsonReq.open('POST', url, true);
         jsonReq.setRequestHeader("Content-Type", "application/json");
-        var query = '{"jsonrpc":"2.0","method":"host.update","params":{"hostid":"' + ChangeHost[i].hid + '","inventory":{"location_lat":"' + ChangeHost[i].point[0].toFixed(12) + '","location_lon":"' + ChangeHost[i].point[1].toFixed(12) + '"}},"auth":"' + auth() + '","id":' + i + '}';
+        var query = '{"jsonrpc":"2.0","method":"host.update","params":{"hostid":"' + ChangeHost[i].hid + '","inventory":{"location_lat":"' + ChangeHost[i].point[0].toFixed(12) + '","location_lon":"' + ChangeHost[i].point[1].toFixed(12) + '"}},"auth":"' + ZabbixYaMap.auth() + '","id":' + i + '}';
         jsonReq.send(query);
      }
 
@@ -89,26 +85,6 @@ function draghost(id, newpoint) {
     }
 }
 
-function auth() {
-	var cookie = " " + document.cookie;
-	var search = " zbx_sessionid=";
-	var setStr = null;
-	var offset = 0;
-	var end = 0;
-	if (cookie.length > 0) {
-		offset = cookie.indexOf(search);
-		if (offset !== -1) {
-			offset += search.length;
-			end = cookie.indexOf(";", offset);
-			if (end === -1) {
-				end = cookie.length;
-			}
-			setStr = unescape(cookie.substring(offset, end));
-		}
-	}
-	return(setStr);
-}
-            
 function SetSelect(htmlSelect, selected) {
 	var jsonReq;
 	if (window.XMLHttpRequest) {
@@ -123,7 +99,7 @@ function SetSelect(htmlSelect, selected) {
 	var url = "api_jsonrpc.php";
 	jsonReq.open('POST', url, true);
 	jsonReq.setRequestHeader("Content-Type", "application/json");
-	var query = '{"jsonrpc":"2.0","method":"hostgroup.getobjects","params":{},"auth":"' + auth() + '","id":1}';
+	var query = '{"jsonrpc":"2.0","method":"hostgroup.getobjects","params":{},"auth":"' + ZabbixYaMap.auth() + '","id":1}';
 	jsonReq.send(query);
 	jsonReq.onreadystatechange = function alertContents() {
 		if (jsonReq.readyState === 4) {
@@ -164,9 +140,9 @@ function ChangeGroup() {
 	jsonReq.open('POST', url, true);
 	jsonReq.setRequestHeader("Content-Type", "application/json");
 	if (groupid == 0) {
-		var query = '{"jsonrpc":"2.0","method":"host.get","params":{"output":["host","name"],"selectInventory":["location_lat","location_lon"]},"auth":"' + auth() + '","id":1}';
+		var query = '{"jsonrpc":"2.0","method":"host.get","params":{"output":["host","name"],"selectInventory":["location_lat","location_lon"]},"auth":"' + ZabbixYaMap.auth() + '","id":1}';
 	} else {
-		var query = '{"jsonrpc":"2.0","method":"host.get","params":{"groupids":' + groupid + ',"output":["host","name"],"selectInventory":["location_lat","location_lon"]},"auth":"' + auth() + '","id":1}';
+		var query = '{"jsonrpc":"2.0","method":"host.get","params":{"groupids":' + groupid + ',"output":["host","name"],"selectInventory":["location_lat","location_lon"]},"auth":"' + ZabbixYaMap.auth() + '","id":1}';
 	}
 	jsonReq.send(query);
 	

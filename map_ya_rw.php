@@ -7,7 +7,7 @@ require_once('include/items.inc.php');
 require_once('yandexapi.conf.php');
 
 $page["title"]    = $MYGOROD;
-$page['file']     = __FILE__;
+$page['file']     = basename(__FILE__);
 $page['hist_arg'] = array();
 $page['scripts']  = array('yamaps_functions_rw.js');
 $page['type']     = detect_page_type(PAGE_TYPE_HTML);

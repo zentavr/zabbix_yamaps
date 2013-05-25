@@ -208,18 +208,12 @@ function problems() {
 										var x = out2.result[0].inventory.location_lat;
 										var y = out2.result[0].inventory.location_lon;
 									}
-									if (x > x_max)
-										x_max = x;
-									if (x < x_min)
-										x_min = x;
-									if (y > y_max)
-										y_max = y;
-									if (y < y_min)
-										y_min = y;
-									ProblemArray
-											.add(
-													new ymaps.Placemark(
-															[ x, y ],
+									if (x > x_max) x_max = x;
+									if (x < x_min) x_min = x;
+									if (y > y_max) y_max = y;
+									if (y < y_min) y_min = y;
+									ProblemArray.add(
+											new ymaps.Placemark([ x, y ],
 															{
 																balloonContent : out.result[i].hostname
 																		+ '<br>'
@@ -233,9 +227,8 @@ function problems() {
 															{
 																preset : 'twirl#redStretchyIcon'
 															}), i);
-									if (PrioProblem === 'true' && x_max != 0) {
-										ZabbixYaMap.Map.setBounds([ [ x_min, y_min ],
-												[ x_max, y_max ] ], {
+									if (ZabbixYaMap.PrioProblem === 'true' && x_max != 0) {
+										ZabbixYaMap.Map.setBounds([ [ x_min, y_min ], [ x_max, y_max ] ], {
 											duration : 1000,
 											checkZoomRange : true
 										});
@@ -253,77 +246,46 @@ function problems() {
 
 
 function ChangeGroup() {
-	                var sel = document.getElementById("selectgroup");
+	var sel = document.getElementById("selectgroup");
 	var groupid = sel.options[sel.selectedIndex].value;
 	HostArray.removeAll();
 	ZabbixYaMap.Map.geoObjects.remove(HostArray);
-	var jsonReq;
-	if (window.XMLHttpRequest) {
-		jsonReq = new XMLHttpRequest();
-		jsonReq.overrideMimeType('text/xml');
-	} else if (window.ActiveXObject) {
-		jsonReq = new ActiveXObject("Microsoft.XMLHTTP");
-	}
-	jsonReq.overrideMimeType('application/json');
-	var url = "api_jsonrpc.php";
-	jsonReq.open('POST', url, true);
-	jsonReq.setRequestHeader("Content-Type", "application/json");
-	if (groupid == 0) {
-		var query = '{"jsonrpc":"2.0","method":"host.get","params":{"output":["host","name"],"selectInventory":["location_lat","location_lon"]},"auth":"'
-				+ ZabbixYaMap.auth() + '","id":1}';
-	} else {
-		var query = '{"jsonrpc":"2.0","method":"host.get","params":{"groupids":'
-				+ groupid
-				+ ',"output":["host","name"],"selectInventory":["location_lat","location_lon"]},"auth":"'
-				+ ZabbixYaMap.auth() + '","id":1}';
-	}
-	jsonReq.send(query);
-	jsonReq.onreadystatechange = function alertContents() {
-		if (jsonReq.readyState === 4) {
-			if (jsonReq.status === 200) {
-				var out = JSON.parse(jsonReq.responseText);
-				var x_max = 0;
-				var y_max = 0;
-				var x_min = 180;
-				var y_min = 180;
-				for ( var i = 0; i < out.result.length; i++) {
-					if (out.result[i].inventory.location_lat == 0
-							|| out.result[i].inventory.location_lon == 0) {
-						x = def_lat;
-						y = def_lon;
-					} else {
-						x = out.result[i].inventory.location_lat;
-						y = out.result[i].inventory.location_lon;
-					}
-					if (x > x_max)
-						x_max = x;
-					if (x < x_min)
-						x_min = x;
-					if (y > y_max)
-						y_max = y;
-					if (y < y_min)
-						y_min = y;
-					HostArray.add(new ymaps.Placemark([ x, y ], {
-						balloonContent : out.result[i].name,
-						iconContent : out.result[i].host,
-						hintContent : out.result[i].name
-					}, {
-						preset : 'twirl#greenStretchyIcon'
-					}), i);
-				}
-				ZabbixYaMap.Map.geoObjects.add(HostArray);
-				if (PrioProblem === 'false' && x_max != 0) {
-					ZabbixYaMap.Map.setBounds([ [ x_min, y_min ], [ x_max, y_max ] ],
-							{
-								duration : 1000,
-								checkZoomRange : true
-							});
-				}
-				return true;
+	
+	ZabbixYaMap.displayHosts(groupid, function(out) {
+		var x_max = 0;
+		var y_max = 0;
+		var x_min = 180;
+		var y_min = 180;
+		for ( var i = 0; i < out.result.length; i++) {
+			if (out.result[i].inventory.location_lat == 0
+					|| out.result[i].inventory.location_lon == 0) {
+				x = def_lat;
+				y = def_lon;
+			} else {
+				x = out.result[i].inventory.location_lat;
+				y = out.result[i].inventory.location_lon;
 			}
-			return (100);
+			if (x > x_max) x_max = x;
+			if (x < x_min) x_min = x;
+			if (y > y_max) y_max = y;
+			if (y < y_min) y_min = y;
+			HostArray.add(new ymaps.Placemark([ x, y ], {
+				balloonContent : out.result[i].name,
+				iconContent : out.result[i].host,
+				hintContent : out.result[i].name
+			}, {
+				preset : 'twirl#greenStretchyIcon'
+			}), i);
 		}
-		return (99);
+		
+		ZabbixYaMap.Map.geoObjects.add(HostArray);
+		if (PrioProblem === 'false' && x_max != 0) {
+			ZabbixYaMap.Map.setBounds([ [ x_min, y_min ], [ x_max, y_max ] ], {
+				duration : 1000,
+				checkZoomRange : true
+			});
+		}
+		return true;
+	});
 
-	};
 }

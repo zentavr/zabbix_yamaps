@@ -5,7 +5,6 @@ function initRW() {
 		maxZoom : 9
 	});
 	
-	console.info('Setting Select');
 	ZabbixYaMap.SetSelect(document.getElementById("selectgroup"), "Все");
 	
 	SaveButton = new ymaps.control.Button({
@@ -75,74 +74,47 @@ function ChangeGroup() {
 	var groupid = sel.options[sel.selectedIndex].value;
 	HostArray.removeAll();
 	ZabbixYaMap.Map.geoObjects.remove(HostArray);
-	var jsonReq;
-	if (window.XMLHttpRequest) {
-		jsonReq = new XMLHttpRequest();
-		jsonReq.overrideMimeType('text/xml');
-	} else if (window.ActiveXObject) {
-		jsonReq = new ActiveXObject("Microsoft.XMLHTTP");
-	}
-	jsonReq.overrideMimeType('application/json');
-	var url = "api_jsonrpc.php";
-	jsonReq.open('POST', url, true);
-	jsonReq.setRequestHeader("Content-Type", "application/json");
-	if (groupid == 0) {
-		var query = '{"jsonrpc":"2.0","method":"host.get","params":{"output":["host","name"],"selectInventory":["location_lat","location_lon"]},"auth":"' + ZabbixYaMap.auth() + '","id":1}';
-	} else {
-		var query = '{"jsonrpc":"2.0","method":"host.get","params":{"groupids":' + groupid + ',"output":["host","name"],"selectInventory":["location_lat","location_lon"]},"auth":"' + ZabbixYaMap.auth() + '","id":1}';
-	}
-	jsonReq.send(query);
-	
-	jsonReq.onreadystatechange = function alertContents() {
-		if (jsonReq.readyState === 4) {
-				if (jsonReq.status === 200) {
-					var out = JSON.parse(jsonReq.responseText);
-					var x_max = 0;
-					var y_max = 0;
-					var x_min = 180;
-					var y_min = 180;
-					for ( var i = 0; i < out.result.length; i++) {
-						if (out.result[i].inventory.location_lat == 0
-								|| out.result[i].inventory.location_lon == 0) {
-							x = def_lat;
-							y = def_lon;
-						} else {
-							x = out.result[i].inventory.location_lat;
-							y = out.result[i].inventory.location_lon;
-						}
-						if (x > x_max)
-							x_max = x;
-						if (x < x_min)
-							x_min = x;
-						if (y > y_max)
-							y_max = y;
-						if (y < y_min)
-							y_min = y;
-						Hosts[i] = new ymaps.Placemark([ x, y ], {
-							hintContent : out.result[i].name,
-							hostid : out.result[i].hostid
-						}, {
-							draggable : true
-						});
-						(function(i) {
-							Hosts[i].events.add('dragend', function() {
-								draghost(Hosts[i].properties.get('hostid'),
-										Hosts[i].geometry.getCoordinates());
-							});
-						})(i);
-						HostArray.add(Hosts[i]);
-	
-					}
-					ZabbixYaMap.Map.geoObjects.add(HostArray);
-					ZabbixYaMap.Map.setBounds([ [ x_min, y_min ], [ x_max, y_max ] ], {
-						duration : 1000,
-						checkZoomRange : true
-					});
-					return true;
-				}
-				return (100);
+
+	ZabbixYaMap.displayHosts(groupid, function(out) {
+		var x_max = 0;
+		var y_max = 0;
+		var x_min = 180;
+		var y_min = 180;
+		for ( var i = 0; i < out.result.length; i++) {
+			if (out.result[i].inventory.location_lat == 0
+					|| out.result[i].inventory.location_lon == 0) {
+				x = def_lat;
+				y = def_lon;
+			} else {
+				x = out.result[i].inventory.location_lat;
+				y = out.result[i].inventory.location_lon;
 			}
-			return (99);
-	
-		};
+			if (x > x_max) x_max = x;
+			if (x < x_min) x_min = x;
+			if (y > y_max) y_max = y;
+			if (y < y_min) y_min = y;
+			Hosts[i] = new ymaps.Placemark([ x, y ], {
+				hintContent : out.result[i].name,
+				hostid : out.result[i].hostid
+			}, {
+				draggable : true
+			});
+			(function(i) {
+				Hosts[i].events.add('dragend', function() {
+					draghost(Hosts[i].properties.get('hostid'),
+							Hosts[i].geometry.getCoordinates());
+					});
+			})(i);
+			HostArray.add(Hosts[i]);
+		}
+		
+		ZabbixYaMap.Map.geoObjects.add(HostArray);
+					
+		// Zoom the map
+		ZabbixYaMap.Map.setBounds([ [ x_min, y_min ], [ x_max, y_max ] ], {
+			duration : 1000,
+			checkZoomRange : true
+		});
+		return true;
+	});
 }

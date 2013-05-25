@@ -23,7 +23,7 @@ insert_js("
 	ZabbixYaMap.def_lon     = ".$MYLATLON['lon'].";
 	ZabbixYaMap.def_zoom    = ".$MYZOOM.";
 	ZabbixYaMap.MapType     = '".$MAPTYPE."';
-	ZabbixYaMap.PrioProblem = ".$PRIOPROBLEM.";
+	ZabbixYaMap.PrioProblem = '".$PRIOPROBLEM."';
 	ZabbixYaMap.isEditable  = true;
 ");
 ?>

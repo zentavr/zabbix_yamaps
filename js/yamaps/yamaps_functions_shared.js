@@ -84,6 +84,51 @@ var ZabbixYaMap = {
 							"Response: " + jqXHR.responseText);
 				}
 			});
+		},
+		displayHosts : function(groupid, callback){
+			if (groupid == 0) {
+				var query = '{
+								"jsonrpc":"2.0",
+								"method":"host.get",
+								"params":{
+									"output":["host","name"],
+									"selectInventory":["location_lat","location_lon"]
+								},
+								"auth":"' + ZabbixYaMap.auth() + '",
+								"id":1
+							}';
+			} else {
+				var query = '{
+								"jsonrpc":"2.0",
+								"method":"host.get",
+								"params":{
+										"groupids":' + groupid + ',
+										"output":["host","name"],
+										"selectInventory":["location_lat","location_lon"]
+								},
+								"auth":"' + ZabbixYaMap.auth() + '",
+								"id":1
+							}';
+			}
+			
+			jQuery.ajax({
+				url: "api_jsonrpc.php",
+				type: "POST",
+				contentType: "application/json",
+				processData : false,
+				async: false,
+				dataType: "json",
+				data: query,
+				success : function(data, textStatus, jqXHR) {
+					callback(data);
+				},
+				error : function( jqXHR, textStatus, errorThrown ) {
+					alert("Cannot load hosts\n\n" + 
+							"Code: " + jqXHR.status + "\n" +
+							"Status: " + jqXHR.statusText + "\n" +
+							"Response: " + jqXHR.responseText);
+				}
+			});
 		}
 };
 

@@ -1,7 +1,3 @@
-ymaps.ready(function() {
-	init(def_lat, def_lon, def_zoom, MapType, PrioProblem);
-});
-            
 
 function init(def_lat, def_lon, def_zoom, MapType, PrioProblem) {
                 console.log(arguments);

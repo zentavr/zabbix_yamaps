@@ -13,7 +13,7 @@ require_once('yandexapi.conf.php');
 $page["title"] = $MYGOROD;
 $page['file'] = 'map_ya_ro.php';
 $page['hist_arg'] = array();
-$page['scripts'] = array('js/yamaps/yamaps_functions.js');
+$page['scripts'] = array('yamaps_functions.js');
 
 
 //$page['type'] = detect_page_type();
@@ -36,15 +36,18 @@ insert_js("
 	var def_lat     = ".$MYLATLON['lat'].";
 	var def_lon     = ".$MYLATLON['lon'].";
 	var def_zoom    = ".$MYZOOM."; 
-    var MapType     = '".$MAPTYPE."';
+	var MapType     = '".$MAPTYPE."';
 	var PrioProblem = ".$PRIOPROBLEM.";
-			
-")
+");
 ?>
 <script src="http://api-maps.yandex.ru/2.0/?load=package.full&lang=ru-RU" type="text/javascript"></script>
-
-
 <?php
+insert_js("
+    ymaps.ready(function() {
+	init(def_lat, def_lon, def_zoom, MapType, PrioProblem);
+    });
+");
+
 require_once('include/page_footer.php');
 ?>
 

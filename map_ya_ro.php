@@ -4,10 +4,11 @@
 //require_once dirname(__FILE__) . '/include/items.inc.php';
 //require_once dirname(__FILE__) . '/yandexapi.conf.php';
 
-require_once dirname($_SERVER["SCRIPT_FILENAME"]) . '/include/config.inc.php';
-require_once dirname($_SERVER["SCRIPT_FILENAME"]) . '/include/hosts.inc.php';
-require_once dirname($_SERVER["SCRIPT_FILENAME"]) . '/include/items.inc.php';
-require_once dirname($_SERVER["SCRIPT_FILENAME"]) . '/yandexapi.conf.php';
+require_once('/include/config.inc.php');
+require_once('/include/js.inc.php');
+require_once('/include/hosts.inc.php');
+require_once('/include/items.inc.php');
+require_once('/yandexapi.conf.php');
 
 $page["title"] = $MYGOROD;
 $page['file'] = 'map_ya_ro.php';
@@ -25,19 +26,15 @@ $page['type'] = detect_page_type(PAGE_TYPE_HTML);
 //}
 
 include_once('include/page_header.php');
-//<meta http-equiv="refresh" content="10"> 
-?>
-<html xmlns="http://www.w3.org/1999/xhtml">
-    <head>
-        <script src="http://api-maps.yandex.ru/2.0/?load=package.full&lang=ru-RU" type="text/javascript"></script>
-        <!-- jQuery is already loaded by Zabbix 2.0.6
-        	<script src="http://yandex.st/jquery/1.6.4/jquery.min.js" type="text/javascript"></script>
-        -->
-        <script type="text/javascript">
-            document.write('<select id="selectgroup" onChange="ChangeGroup();"></select>');
+
+
+insert_js("
+			document.write('<select id=\"selectgroup\" onChange=\"ChangeGroup();\"></select>');
             var h = jQuery(window).height() - 180;
-            document.write('<div id="map" style="width:100%; height:' + h + 'px"></div>');
-        </script>
+            document.write('<div id=\"map\" style=\"width:100%; height:' + h + 'px\"></div>');
+			")
+?>
+        <script src="http://api-maps.yandex.ru/2.0/?load=package.full&lang=ru-RU" type="text/javascript"></script>
         <script>
             ymaps.ready(init);
             function init() {
@@ -64,7 +61,7 @@ include_once('include/page_header.php');
                 }))
                         .add(new ymaps.control.MiniMap({
                     //type: 'yandex#publicMap'
-                    type: 'yandex#map'
+                    type: 'yandex#<?php echo $MAPTYPE ?>'
                 }));
                 HostArray = new ymaps.Clusterer({
                     maxZoom: 17
@@ -404,8 +401,6 @@ include_once('include/page_header.php');
                 };
             }
         </script>
-    </head>
-</html>
 
 <?php
 require_once dirname(__FILE__) . '/include/page_footer.php';

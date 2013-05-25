@@ -86,32 +86,13 @@ var ZabbixYaMap = {
 			});
 		},
 		displayHosts : function(groupid, callback){
-			console.info(arguments);
+			//console.info(arguments);
 			if (groupid == 0) {
-				var query = '{
-								"jsonrpc":"2.0",
-								"method":"host.get",
-								"params":{
-									"output":["host","name"],
-									"selectInventory":["location_lat","location_lon"]
-								},
-								"auth":"' + ZabbixYaMap.auth() + '",
-								"id":1
-							}';
+				var query = '{"jsonrpc":"2.0","method":"host.get","params":{"output":["host","name"],"selectInventory":["location_lat","location_lon"]},"auth":"' + ZabbixYaMap.auth() + '","id":1}';
 			} else {
-				var query = '{
-								"jsonrpc":"2.0",
-								"method":"host.get",
-								"params":{
-										"groupids":' + groupid + ',
-										"output":["host","name"],
-										"selectInventory":["location_lat","location_lon"]
-								},
-								"auth":"' + ZabbixYaMap.auth() + '",
-								"id":1
-							}';
+				var query = '{"jsonrpc":"2.0","method":"host.get","params":{"groupids":' + groupid + ',"output":["host","name"],"selectInventory":["location_lat","location_lon"]},"auth":"' + ZabbixYaMap.auth() + '","id":1}';
 			}
-			console.info(query);
+			//console.info(query);
 			jQuery.ajax({
 				url: "api_jsonrpc.php",
 				type: "POST",

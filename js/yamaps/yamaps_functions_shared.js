@@ -86,6 +86,7 @@ var ZabbixYaMap = {
 			});
 		},
 		displayHosts : function(groupid, callback){
+			console.info(arguments);
 			if (groupid == 0) {
 				var query = '{
 								"jsonrpc":"2.0",
@@ -110,7 +111,7 @@ var ZabbixYaMap = {
 								"id":1
 							}';
 			}
-			
+			console.info(query);
 			jQuery.ajax({
 				url: "api_jsonrpc.php",
 				type: "POST",

@@ -1,0 +1,1 @@
+// Shared Functions for Zabbix YaMaps

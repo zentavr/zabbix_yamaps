@@ -46,5 +46,6 @@ https://www.zabbix.com/forum/showthread.php?t=37480
 	Add this (probably you need to add the coma above too):
 		
 		// YaMaps
-		'yamaps_functions.js' => 'yamaps',
+		'yamaps_functions_ro.js' => 'yamaps',
 		'yamaps_functions_rw.js' => 'yamaps/'
+		'yamaps_functions_shared.js' => 'yamaps/',

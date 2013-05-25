@@ -32,7 +32,8 @@ insert_js("
 <?php
 insert_js("
     ymaps.ready(function() {
-		init(def_lat, def_lon, def_zoom, MapType, PrioProblem);
+		ZabbixYaMap.init();
+		initRO();
     });
 ");
 

@@ -4,6 +4,7 @@ function initRW() {
 	HostArray = new ymaps.Clusterer({
 		maxZoom : 9
 	});
+	
 	SetSelect(document.getElementById("selectgroup"), "Все");
 	
 	SaveButton = new ymaps.control.Button({
@@ -68,25 +69,18 @@ function draghost(id, newpoint) {
     }
 }
 
+/* Fetch the Host Groups */
 function SetSelect(htmlSelect, selected) {
-	var jsonReq;
-	if (window.XMLHttpRequest) {
-		jsonReq = new XMLHttpRequest();
-		jsonReq.overrideMimeType('text/xml');
-	}
-	else if (window.ActiveXObject) {
-		jsonReq = new ActiveXObject("Microsoft.XMLHTTP");
-	}
-
-	jsonReq.overrideMimeType('application/json');
-	var url = "api_jsonrpc.php";
-	jsonReq.open('POST', url, true);
-	jsonReq.setRequestHeader("Content-Type", "application/json");
-	var query = '{"jsonrpc":"2.0","method":"hostgroup.getobjects","params":{},"auth":"' + ZabbixYaMap.auth() + '","id":1}';
-	jsonReq.send(query);
-	jsonReq.onreadystatechange = function alertContents() {
-		if (jsonReq.readyState === 4) {
-			if (jsonReq.status === 200) {
+	$.ajax({
+		url: "api_jsonrpc.php",
+		type: "POST",
+		contentType: "application/json",
+		processData : false,
+		async: false,
+		data: '{"jsonrpc":"2.0","method":"hostgroup.getobjects","params":{},"auth":"' + ZabbixYaMap.auth() + '","id":1}',
+		success : function(data, textStatus, jqXHR) {
+				console.log(arguments);
+				/*
 				var out = JSON.parse(jsonReq.responseText);
                 opt = new Option("Все", 0);
                 opt.selected = "selected";
@@ -99,11 +93,13 @@ function SetSelect(htmlSelect, selected) {
                     htmlSelect.options.add(opt, i + 1);
                 }
                 return true;
-           }
-           return (100);
-        }
-        return (99);
-    };
+                */
+		},
+		error : function( jqXHR, textStatus, errorThrown ) {
+			alert('Cannot load host groups: ' + textStatus);
+		}
+	});
+
 }
 
 function ChangeGroup() {

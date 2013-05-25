@@ -4,11 +4,11 @@
 //require_once dirname(__FILE__) . '/include/items.inc.php';
 //require_once dirname(__FILE__) . '/yandexapi.conf.php';
 
-require_once('/include/config.inc.php');
-require_once('/include/js.inc.php');
-require_once('/include/hosts.inc.php');
-require_once('/include/items.inc.php');
-require_once('/yandexapi.conf.php');
+require_once('include/config.inc.php');
+require_once('include/js.inc.php');
+require_once('include/hosts.inc.php');
+require_once('include/items.inc.php');
+require_once('yandexapi.conf.php');
 
 $page["title"] = $MYGOROD;
 $page['file'] = 'map_ya_ro.php';
@@ -403,7 +403,7 @@ insert_js("
         </script>
 
 <?php
-require_once dirname(__FILE__) . '/include/page_footer.php';
+require_once('include/page_footer.php');
 ?>
 
 

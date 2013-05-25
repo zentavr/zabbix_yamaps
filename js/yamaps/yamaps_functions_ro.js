@@ -148,7 +148,7 @@ function initRO() {
 	});
 	ZabbixYaMap.Map.controls.add(FollowProblem);
 	
-	ChangeGroup();
+	//ChangeGroup();
 }
 
 function problems() {

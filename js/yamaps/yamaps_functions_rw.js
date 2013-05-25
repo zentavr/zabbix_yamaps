@@ -72,7 +72,6 @@ function draghost(id, newpoint) {
 
 /* Fetch the Host Groups */
 function SetSelect(htmlSelect, selected) {
-	console.info(arguments);
 	jQuery.ajax({
 		url: "api_jsonrpc.php",
 		type: "POST",
@@ -82,21 +81,18 @@ function SetSelect(htmlSelect, selected) {
 		dataType: "json",
 		data: '{"jsonrpc":"2.0","method":"hostgroup.getobjects","params":{},"auth":"' + ZabbixYaMap.auth() + '","id":1}',
 		success : function(data, textStatus, jqXHR) {
-				console.log(arguments);
-				/*
-				var out = JSON.parse(jsonReq.responseText);
-                opt = new Option("Все", 0);
+				/* Populate the select box */
+				opt = new Option("Все", 0);
                 opt.selected = "selected";
                 htmlSelect.options.add(opt, 0);
-                for (i = 0; i < out.result.length; i++) {
-                	opt = new Option(out.result[i].name, out.result[i].groupid);
+                for (i = 0; i < data.result.length; i++) {
+                	opt = new Option(data.result[i].name, data.result[i].groupid);
                     if (out.result[i].name === selected) {
                     	opt.selected = "selected";
                     }
                     htmlSelect.options.add(opt, i + 1);
                 }
-                return true;
-                */
+                return true;                
 		},
 		error : function( jqXHR, textStatus, errorThrown ) {
 			alert("Cannot load host groups\n\n" + 
@@ -105,7 +101,6 @@ function SetSelect(htmlSelect, selected) {
 					"Response: " + jqXHR.responseText);
 		}
 	});
-
 }
 
 function ChangeGroup() {

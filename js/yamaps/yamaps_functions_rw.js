@@ -5,6 +5,7 @@ function initRW() {
 		maxZoom : 9
 	});
 	
+	console.info('Setting Select');
 	SetSelect(document.getElementById("selectgroup"), "Все");
 	
 	SaveButton = new ymaps.control.Button({
@@ -71,6 +72,7 @@ function draghost(id, newpoint) {
 
 /* Fetch the Host Groups */
 function SetSelect(htmlSelect, selected) {
+	console.info(arguments);
 	$.ajax({
 		url: "api_jsonrpc.php",
 		type: "POST",

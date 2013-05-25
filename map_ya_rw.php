@@ -45,8 +45,7 @@ include_once('include/page_header.php');
                 ZabbixMap = new ymaps.Map('map', {
                     center: [<?php echo $MYLATLON['lat']; ?>, <?php echo $MYLATLON['lon']; ?>],
                     zoom: <?php echo $MYZOOM; ?>,
-                    //type: 'yandex#publicMap',
-                    type: 'yandex#map',
+                    type: 'yandex#<?php echo $MAPTYPE ?>',
                     behaviors: ['default', 'scrollZoom']
                 });
                 ZabbixMap.controls
@@ -55,15 +54,13 @@ include_once('include/page_header.php');
                         .add('mapTools')
                         .add(new ymaps.control.ScaleLine())
                         .add(new ymaps.control.SearchControl({
-                    //provider: 'yandex#publicMap',
-                    provider: 'yandex#map',
+                    provider: 'yandex#<?php echo $MAPTYPE ?>',
                     left: '40px',
                     top: '10px',
                     useMapBounds: true
                 }))
                         .add(new ymaps.control.MiniMap({
-                    //type: 'yandex#publicMap'
-                    type: 'yandex#map'
+                    type: 'yandex#<?php echo $MAPTYPE ?>'
                 }));
                 Hosts = [];
                 ChangeHost = [];

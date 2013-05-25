@@ -246,6 +246,7 @@ function problems() {
 
 
 function ChangeGroup() {
+	console.info('Doing ChangeGroup()');
 	var sel = document.getElementById("selectgroup");
 	var groupid = sel.options[sel.selectedIndex].value;
 	HostArray.removeAll();

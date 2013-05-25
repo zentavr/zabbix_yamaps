@@ -29,23 +29,30 @@ include_once('include/page_header.php');
 
 
 insert_js("
-			document.write('<select id=\"selectgroup\" onChange=\"ChangeGroup();\"></select>');
-            var h = jQuery(window).height() - 180;
-            document.write('<div id=\"map\" style=\"width:100%; height:' + h + 'px\"></div>');
-			")
+	document.write('<select id=\"selectgroup\" onChange=\"ChangeGroup();\"></select>');
+	var h = jQuery(window).height() - 180;
+	document.write('<div id=\"map\" style=\"width:100%; height:' + h + 'px\"></div>');
+
+	var def_lat     = ".$MYLATLON['lat'].";
+	var def_lon     = ".$MYLATLON['lon'].";
+	var def_zoom    = ".$MYZOOM."; 
+    var MapType     = ".$MAPTYPE.";
+	var PrioProblem = ".$PRIOPROBLEM.";
+			
+")
 ?>
         <script src="http://api-maps.yandex.ru/2.0/?load=package.full&lang=ru-RU" type="text/javascript"></script>
         <script>
-            ymaps.ready(init);
-            function init() {
-                def_lat = <?php echo $MYLATLON['lat']; ?>;
-                def_lon = <?php echo $MYLATLON['lon']; ?>;
-                PrioProblem = '<?php echo $PRIOPROBLEM; ?>';
+            ymaps.ready(function() {
+            	init(def_lat, def_lon, def_zoom, MapType, PrioProblem);
+            });
+            
+            function init(def_lat, def_lon, def_zoom, MapType, PrioProblem) {
                 minseverity = 0;
                 ZabbixMap = new ymaps.Map('map', {
-                    center: [<?php echo $MYLATLON['lat']; ?>, <?php echo $MYLATLON['lon']; ?>],
-                    zoom: <?php echo $MYZOOM; ?>,
-                    type: 'yandex#<?php echo $MAPTYPE ?>',
+                    center: [def_lat, def_lon],
+                    zoom: def_zoom,
+                    type: 'yandex#' + MapType,
                     behaviors: ['default', 'scrollZoom']
                 });
                 ZabbixMap.controls
@@ -54,14 +61,13 @@ insert_js("
                         .add('mapTools')
                         .add(new ymaps.control.ScaleLine())
                         .add(new ymaps.control.SearchControl({
-                    provider: 'yandex#<?php echo $MAPTYPE ?>',
+                    provider: 'yandex#' + MapType,
                     left: '40px',
                     top: '10px',
                     useMapBounds: true
                 }))
                         .add(new ymaps.control.MiniMap({
-                    //type: 'yandex#publicMap'
-                    type: 'yandex#<?php echo $MAPTYPE ?>'
+                    type: 'yandex#' + MapType
                 }));
                 HostArray = new ymaps.Clusterer({
                     maxZoom: 17

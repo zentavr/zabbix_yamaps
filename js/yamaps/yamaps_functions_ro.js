@@ -152,96 +152,92 @@ function initRO() {
 }
 
 function problems() {
-	var jsonReq;
-	if (window.XMLHttpRequest) {
-		jsonReq = new XMLHttpRequest();
-		jsonReq.overrideMimeType('text/xml');
-	} else if (window.ActiveXObject) {
-		jsonReq = new ActiveXObject("Microsoft.XMLHTTP");
-	}
-	jsonReq.overrideMimeType('application/json');
-	var url = "api_jsonrpc.php";
-	jsonReq.open('POST', url, true);
-	jsonReq.setRequestHeader("Content-Type", "application/json");
-	var query = '{"jsonrpc": "2.0","method": "trigger.get","params":{"monitored":"true","expandDescription":"true","min_severity":"'
-			+ minseverity
-			+ '","expandData":"true","output":["description"],"filter":{"value":"1","value_flags":0}},"auth":"'
-			+ ZabbixYaMap.auth() + '","id":1}';
-	jsonReq.send(query);
 	ProblemArray.removeAll();
-	jsonReq.onreadystatechange = function alertContents() {
-		if (jsonReq.readyState === 4) {
-			if (jsonReq.status === 200) {
-				var out = JSON.parse(jsonReq.responseText);
-				var x_max = 0;
-				var y_max = 0;
-				var x_min = 180;
-				var y_min = 180;
-				for (i = 0; i < out.result.length; i++) {
-					(function(i) {
-						var jsonReqTr;
-						if (window.XMLHttpRequest) {
-							jsonReqTr = new XMLHttpRequest();
-							jsonReqTr.overrideMimeType('text/xml');
-						} else if (window.ActiveXObject) {
-							jsonReqTr = new ActiveXObject("Microsoft.XMLHTTP");
-						}
-						jsonReqTr.overrideMimeType('application/json');
-						jsonReqTr.open('POST', url, true);
-						jsonReqTr.setRequestHeader("Content-Type",
-								"application/json");
-						var query2 = '{"jsonrpc":"2.0","method":"host.get","params":{"hostids":"'
-								+ out.result[i].hostid
-								+ '","selectInventory":["location_lat","location_lon"]},"auth":"'
-								+ ZabbixYaMap.auth() + '","id":' + i + '}';
-						jsonReqTr.send(query2);
-						jsonReqTr.onreadystatechange = function alertContents() {
-							if (jsonReqTr.readyState === 4) {
-								if (jsonReqTr.status === 200) {
-									var out2 = JSON
-											.parse(jsonReqTr.responseText);
-									if (out2.result[0].inventory.location_lat == 0
-											|| out2.result[0].inventory.location_lon == 0) {
-										var x = def_lat;
-										var y = def_lon;
-									} else {
-										var x = out2.result[0].inventory.location_lat;
-										var y = out2.result[0].inventory.location_lon;
-									}
-									if (x > x_max) x_max = x;
-									if (x < x_min) x_min = x;
-									if (y > y_max) y_max = y;
-									if (y < y_min) y_min = y;
-									ProblemArray.add(
-											new ymaps.Placemark([ x, y ],
-															{
-																balloonContent : out.result[i].hostname
-																		+ '<br>'
-																		+ out.result[i].description,
-																iconContent : out.result[i].description
-															// hintContent:
-															// out.result[i].hostname
-															// + '<br>' +
-															// out.result[i].description
-															},
-															{
-																preset : 'twirl#redStretchyIcon'
-															}), i);
-									if (ZabbixYaMap.PrioProblem === 'true' && x_max != 0) {
-										ZabbixYaMap.Map.setBounds([ [ x_min, y_min ], [ x_max, y_max ] ], {
-											duration : 1000,
-											checkZoomRange : true
-										});
-									}
-								}
+	
+	var query = '{"jsonrpc": "2.0","method": "trigger.get","params":{"monitored":"true","expandDescription":"true","min_severity":"'
+		+ minseverity
+		+ '","expandData":"true","output":["description"],"filter":{"value":"1","value_flags":0}},"auth":"'
+		+ ZabbixYaMap.auth() + '","id":1}';
+	
+	jQuery.ajax({
+		url: "api_jsonrpc.php",
+		type: "POST",
+		contentType: "application/json",
+		processData : false,
+		async: true,
+		dataType: "json",
+		data: query,
+		success : function(out, textStatus, jqXHR) {
+			var out = JSON.parse(jsonReq.responseText);
+			var x_max = 0;
+			var y_max = 0;
+			var x_min = 180;
+			var y_min = 180;
+			for (i = 0; i < out.result.length; i++) {
+				(function(i) {
+					jQuery.ajax({
+						url: "api_jsonrpc.php",
+						type: "POST",
+						contentType: "application/json",
+						processData : false,
+						async: true,
+						dataType: "json",
+						data: '{"jsonrpc":"2.0","method":"host.get","params":{"hostids":"'
+							+ out.result[i].hostid
+							+ '","selectInventory":["location_lat","location_lon"]},"auth":"'
+							+ ZabbixYaMap.auth() + '","id":' + i + '}',
+						success : function(data, textStatus, jqXHR) {
+							if (data.result[0].inventory.location_lat == 0
+									|| data.result[0].inventory.location_lon == 0) {
+								var x = def_lat;
+								var y = def_lon;
+							} else {
+								var x = data.result[0].inventory.location_lat;
+								var y = data.result[0].inventory.location_lon;
 							}
-						};
-					})(i);
-				}
-				ZabbixYaMap.Map.geoObjects.add(ProblemArray);
+							if (x > x_max) x_max = x;
+							if (x < x_min) x_min = x;
+							if (y > y_max) y_max = y;
+							if (y < y_min) y_min = y;
+							ProblemArray.add(
+									new ymaps.Placemark([ x, y ],{
+											balloonContent : out.result[i].hostname
+															+ '<br>'
+															+ out.result[i].description,
+											iconContent : out.result[i].description
+											// hintContent: out.result[i].hostname
+											// + '<br>' +
+											// out.result[i].description
+									},
+									{
+										preset : 'twirl#redStretchyIcon'
+									}), i);
+							if (ZabbixYaMap.PrioProblem === 'true' && x_max != 0) {
+								ZabbixYaMap.Map.setBounds([ [ x_min, y_min ], [ x_max, y_max ] ], {
+									duration : 1000,
+									checkZoomRange : true
+								});
+							}
+						},
+						error : function( jqXHR, textStatus, errorThrown ) {
+							alert("Cannot load hosts\n\n" + 
+									"Code: " + jqXHR.status + "\n" +
+									"Status: " + jqXHR.statusText + "\n" +
+									"Response: " + jqXHR.responseText);
+						}
+					});	/* Ajax is done */
+				})(i);
 			}
+			ZabbixYaMap.Map.geoObjects.add(ProblemArray);
+		},
+		error : function( jqXHR, textStatus, errorThrown ) {
+			alert("Cannot load hosts\n\n" + 
+					"Code: " + jqXHR.status + "\n" +
+					"Status: " + jqXHR.statusText + "\n" +
+					"Response: " + jqXHR.responseText);
 		}
-	};
+	});
+
 }
 
 

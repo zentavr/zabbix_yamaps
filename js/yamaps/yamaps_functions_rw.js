@@ -27,20 +27,17 @@ function initRW() {
 
 function save_change() {
 	for (var i = 0; i < ChangeHost.length; i++) {
-    	var jsonReq;
-        if (window.XMLHttpRequest) {
-        	jsonReq = new XMLHttpRequest();
-            jsonReq.overrideMimeType('text/xml');
-        } else if (window.ActiveXObject) {
-        	jsonReq = new ActiveXObject("Microsoft.XMLHTTP");
-        }
-
-        jsonReq.overrideMimeType('application/json');
-        var url = "api_jsonrpc.php";
-        jsonReq.open('POST', url, true);
-        jsonReq.setRequestHeader("Content-Type", "application/json");
-        var query = '{"jsonrpc":"2.0","method":"host.update","params":{"hostid":"' + ChangeHost[i].hid + '","inventory":{"location_lat":"' + ChangeHost[i].point[0].toFixed(12) + '","location_lon":"' + ChangeHost[i].point[1].toFixed(12) + '"}},"auth":"' + ZabbixYaMap.auth() + '","id":' + i + '}';
-        jsonReq.send(query);
+		
+		var query = '{"jsonrpc":"2.0","method":"host.update","params":{"hostid":"' + ChangeHost[i].hid + '","inventory":{"location_lat":"' + ChangeHost[i].point[0].toFixed(12) + '","location_lon":"' + ChangeHost[i].point[1].toFixed(12) + '"}},"auth":"' + ZabbixYaMap.auth() + '","id":' + i + '}';
+		jQuery.ajax({
+			url: "api_jsonrpc.php",
+			type: "POST",
+			contentType: "application/json",
+			processData : false,
+			async: false,
+			dataType: "json",
+			data: query
+		});
      }
 
 	ChangeHost.length = 0;

@@ -1,13 +1,9 @@
 <?php
-//require_once dirname(__FILE__) . '/include/config.inc.php';
-//require_once dirname(__FILE__) . '/include/hosts.inc.php';
-//require_once dirname(__FILE__) . '/include/items.inc.php';
-//require_once dirname(__FILE__) . '/yandexapi.conf.php';
 
-require_once dirname($_SERVER["SCRIPT_FILENAME"]) . '/include/config.inc.php';
-require_once dirname($_SERVER["SCRIPT_FILENAME"]) . '/include/hosts.inc.php';
-require_once dirname($_SERVER["SCRIPT_FILENAME"]) . '/include/items.inc.php';
-require_once dirname($_SERVER["SCRIPT_FILENAME"]) . '/yandexapi.conf.php';
+require_once('include/config.inc.php');
+require_once('include/hosts.inc.php');
+require_once('include/items.inc.php');
+require_once('yandexapi.conf.php');
 
 
 $page["title"] = $MYGOROD;
@@ -264,7 +260,7 @@ include_once('include/page_header.php');
 </html>
 
 <?php
-require_once dirname(__FILE__) . '/include/page_footer.php';
+require_once('include/page_footer.php');
 ?>
 
 

@@ -36,7 +36,7 @@ insert_js("
 	var def_lat     = ".$MYLATLON['lat'].";
 	var def_lon     = ".$MYLATLON['lon'].";
 	var def_zoom    = ".$MYZOOM."; 
-    var MapType     = ".$MAPTYPE.";
+    var MapType     = '".$MAPTYPE."';
 	var PrioProblem = ".$PRIOPROBLEM.";
 			
 ")
@@ -48,6 +48,7 @@ insert_js("
             });
             
             function init(def_lat, def_lon, def_zoom, MapType, PrioProblem) {
+                console.log(arguments);
                 minseverity = 0;
                 ZabbixMap = new ymaps.Map('map', {
                     center: [def_lat, def_lon],

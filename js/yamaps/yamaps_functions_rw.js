@@ -1,22 +1,4 @@
-function init(def_lat, def_lon, def_zoom, MapType, PrioProblem) {
-	ZabbixMap = new ymaps.Map('map', {
-		center : [ def_lat, def_lon ],
-		zoom : def_zoom,
-		type : 'yandex#' + MapType,
-		behaviors : [ 'default', 'scrollZoom' ]
-	});
-
-	ZabbixMap.controls.add('zoomControl').add('typeSelector').add('mapTools')
-			.add(new ymaps.control.ScaleLine()).add(
-					new ymaps.control.SearchControl({
-						provider : 'yandex#' + MapType,
-						left : '40px',
-						top : '10px',
-						useMapBounds : true
-					})).add(new ymaps.control.MiniMap({
-				type : 'yandex#' + MapType
-			}));
-
+function initRW() {
 	Hosts = [];
 	ChangeHost = [];
 	HostArray = new ymaps.Clusterer({
@@ -37,7 +19,7 @@ function init(def_lat, def_lon, def_zoom, MapType, PrioProblem) {
 		selectOnClick : false
 	});
 	SaveButton.disable();
-	ZabbixMap.controls.add(SaveButton);
+	ZabbixYaMap.Map.controls.add(SaveButton);
 	saved = false;
 	ChangeGroup();
 }
@@ -128,7 +110,7 @@ function ChangeGroup() {
 	var sel = document.getElementById("selectgroup");
 	var groupid = sel.options[sel.selectedIndex].value;
 	HostArray.removeAll();
-	ZabbixMap.geoObjects.remove(HostArray);
+	ZabbixYaMap.Map.geoObjects.remove(HostArray);
 	var jsonReq;
 	if (window.XMLHttpRequest) {
 		jsonReq = new XMLHttpRequest();
@@ -187,8 +169,8 @@ function ChangeGroup() {
 						HostArray.add(Hosts[i]);
 	
 					}
-					ZabbixMap.geoObjects.add(HostArray);
-					ZabbixMap.setBounds([ [ x_min, y_min ], [ x_max, y_max ] ], {
+					ZabbixYaMap.Map.geoObjects.add(HostArray);
+					ZabbixYaMap.Map.setBounds([ [ x_min, y_min ], [ x_max, y_max ] ], {
 						duration : 1000,
 						checkZoomRange : true
 					});

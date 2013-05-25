@@ -1,25 +1,7 @@
 
-function init(def_lat, def_lon, def_zoom, MapType, PrioProblem) {
-	console.log(arguments);
+function initRO() {
 	minseverity = 0;
-	ZabbixMap = new ymaps.Map('map', {
-		center : [ def_lat, def_lon ],
-		zoom : def_zoom,
-		type : 'yandex#' + MapType,
-		behaviors : [ 'default', 'scrollZoom' ]
-	});
-
-	ZabbixMap.controls.add('zoomControl').add('typeSelector').add('mapTools')
-			.add(new ymaps.control.ScaleLine()).add(
-					new ymaps.control.SearchControl({
-						provider : 'yandex#' + MapType,
-						left : '40px',
-						top : '10px',
-						useMapBounds : true
-					})).add(new ymaps.control.MiniMap({
-				type : 'yandex#' + MapType
-			}));
-
+	
 	HostArray = new ymaps.Clusterer({
 		maxZoom : 17
 	});
@@ -91,7 +73,7 @@ function init(def_lat, def_lon, def_zoom, MapType, PrioProblem) {
 		})(i);
 	}
 
-	ZabbixMap.controls.add(UpdateListBox);
+	ZabbixYaMap.Map.controls.add(UpdateListBox);
 	
 	
 	var MinseverityListBox = new ymaps.control.ListBox({
@@ -146,7 +128,7 @@ function init(def_lat, def_lon, def_zoom, MapType, PrioProblem) {
 			});
 		})(i);
 	}
-	ZabbixMap.controls.add(MinseverityListBox);
+	ZabbixYaMap.Map.controls.add(MinseverityListBox);
 	
 	var FollowProblem = new ymaps.control.RadioGroup({
 		items : [ new ymaps.control.Button('Проблемами'),
@@ -164,7 +146,7 @@ function init(def_lat, def_lon, def_zoom, MapType, PrioProblem) {
 	FollowProblem.get(1).events.add('click', function() {
 		PrioProblem = 'false';
 	});
-	ZabbixMap.controls.add(FollowProblem);
+	ZabbixYaMap.Map.controls.add(FollowProblem);
 	
 	ChangeGroup();
 }
@@ -252,7 +234,7 @@ function problems() {
 																preset : 'twirl#redStretchyIcon'
 															}), i);
 									if (PrioProblem === 'true' && x_max != 0) {
-										ZabbixMap.setBounds([ [ x_min, y_min ],
+										ZabbixYaMap.Map.setBounds([ [ x_min, y_min ],
 												[ x_max, y_max ] ], {
 											duration : 1000,
 											checkZoomRange : true
@@ -263,7 +245,7 @@ function problems() {
 						};
 					})(i);
 				}
-				ZabbixMap.geoObjects.add(ProblemArray);
+				ZabbixYaMap.Map.geoObjects.add(ProblemArray);
 			}
 		}
 	};
@@ -310,7 +292,7 @@ function ChangeGroup() {
 	                var sel = document.getElementById("selectgroup");
 	var groupid = sel.options[sel.selectedIndex].value;
 	HostArray.removeAll();
-	ZabbixMap.geoObjects.remove(HostArray);
+	ZabbixYaMap.Map.geoObjects.remove(HostArray);
 	var jsonReq;
 	if (window.XMLHttpRequest) {
 		jsonReq = new XMLHttpRequest();
@@ -365,9 +347,9 @@ function ChangeGroup() {
 						preset : 'twirl#greenStretchyIcon'
 					}), i);
 				}
-				ZabbixMap.geoObjects.add(HostArray);
+				ZabbixYaMap.Map.geoObjects.add(HostArray);
 				if (PrioProblem === 'false' && x_max != 0) {
-					ZabbixMap.setBounds([ [ x_min, y_min ], [ x_max, y_max ] ],
+					ZabbixYaMap.Map.setBounds([ [ x_min, y_min ], [ x_max, y_max ] ],
 							{
 								duration : 1000,
 								checkZoomRange : true

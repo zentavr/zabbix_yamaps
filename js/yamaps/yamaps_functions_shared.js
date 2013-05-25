@@ -5,18 +5,21 @@ var ZabbixYaMap = {
 		def_zoom    : undefined,
 		MapType     : undefined,
 		PrioProblem : undefined,
+		isEditable  : false,
 		
 		Map         : undefined,
 		
 		/* Functions */
 		init : function() {
+			/* Initialize the map */
 			ZabbixYaMap.Map = new ymaps.Map('map', {
 				center : [ ZabbixYaMap.def_lat, ZabbixYaMap.def_lon ],
 				zoom : ZabbixYaMap.def_zoom,
 				type : 'yandex#' + ZabbixYaMap.MapType,
 				behaviors : [ 'default', 'scrollZoom' ]
 			});
-
+			
+			/* Add default controls */
 			ZabbixYaMap.Map.controls
 			        .add('zoomControl')
 			        .add('typeSelector')

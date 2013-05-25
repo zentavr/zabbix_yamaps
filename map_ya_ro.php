@@ -24,6 +24,7 @@ insert_js("
 	ZabbixYaMap.def_zoom    = ".$MYZOOM."; 
 	ZabbixYaMap.MapType     = '".$MAPTYPE."';
 	ZabbixYaMap.PrioProblem = ".$PRIOPROBLEM.";
+	ZabbixYaMap.isEditable  = false;
 ");
 ?>
 <!-- Load YandexMaps JS Classes -->

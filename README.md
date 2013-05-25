@@ -1,3 +1,6 @@
+Yandex Maps Plugin for Zabbix
+==============
+
 Code is based on the code of oscar, original sources was downloaded from here:
 https://www.zabbix.com/forum/showthread.php?t=37480
 
@@ -36,3 +39,4 @@ https://www.zabbix.com/forum/showthread.php?t=37480
   Add this (probably you need to add the coma above too):
 		// YaMaps
 		'yamaps_functions.js' => 'yamaps',
+		'yamaps_functions_rw.js' => 'yamaps/'

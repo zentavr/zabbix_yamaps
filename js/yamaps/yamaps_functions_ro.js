@@ -157,10 +157,11 @@ function initRO() {
 
 function problems() {
 	console.info("Running problems()");
-	
 	ProblemArray.removeAll();
 	
-	var query = '{"jsonrpc": "2.0","method": "trigger.get","params":{"monitored":"true","expandDescription":"true","min_severity":"'
+	var sel = document.getElementById("selectgroup");
+	var groupid = sel.options[sel.selectedIndex].value;
+	var query = '{"jsonrpc": "2.0","method": "trigger.get","params":{"monitored":"true","groupids":' + groupid + ', "expandDescription":"true","min_severity":"'
 		+ minseverity
 		+ '","expandData":"true","output":["description"],"filter":{"value":"1","value_flags":0}},"auth":"'
 		+ ZabbixYaMap.auth() + '","id":1}';
@@ -260,6 +261,8 @@ function problems() {
 
 function ChangeGroup() {
 	//console.info('Doing ChangeGroup()');
+	problems();
+	/*
 	var sel = document.getElementById("selectgroup");
 	var groupid = sel.options[sel.selectedIndex].value;
 	HostArray.removeAll();
@@ -306,4 +309,5 @@ function ChangeGroup() {
 		}
 		return true;
 	});
+	*/
 }

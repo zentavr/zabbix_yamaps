@@ -254,25 +254,30 @@ function ChangeGroup() {
 		var x_min = 180;
 		var y_min = 180;
 		for ( var i = 0; i < out.result.length; i++) {
-			if (out.result[i].inventory.location_lat == 0
-					|| out.result[i].inventory.location_lon == 0) {
+			if (out.result[i].inventory.location_lat == 0 || out.result[i].inventory.location_lon == 0) {
 				x = ZabbixYaMap.def_lat;
 				y = ZabbixYaMap.def_lon;
+				iconPreset = 'twirl#whiteStretchyIcon';
 			} else {
 				x = out.result[i].inventory.location_lat;
 				y = out.result[i].inventory.location_lon;
+				iconPreset = 'twirl#greenStretchyIcon';
 			}
 			if (x > x_max) x_max = x;
 			if (x < x_min) x_min = x;
 			if (y > y_max) y_max = y;
 			if (y < y_min) y_min = y;
-			HostArray.add(new ymaps.Placemark([ x, y ], {
-				balloonContent : out.result[i].name,
-				iconContent : out.result[i].host,
-				hintContent : out.result[i].name
-			}, {
-				preset : 'twirl#greenStretchyIcon'
-			}), i);
+			HostArray.add(new ymaps.Placemark(
+					[ x, y ], 
+					{
+						balloonContent : out.result[i].name,
+						iconContent : out.result[i].host,
+						hintContent : out.result[i].name
+					},
+					{
+						preset : iconPreset
+					}
+				), i);
 		}
 		
 		ZabbixYaMap.Map.geoObjects.add(HostArray);

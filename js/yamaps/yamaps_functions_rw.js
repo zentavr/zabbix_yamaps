@@ -78,28 +78,34 @@ function ChangeGroup() {
 		var x_min = 180;
 		var y_min = 180;
 		for ( var i = 0; i < out.result.length; i++) {
-			if (out.result[i].inventory.location_lat == 0
-					|| out.result[i].inventory.location_lon == 0) {
+			/* If there is no Lattitude and Longtitude came from Zabbix */
+			if (out.result[i].inventory.location_lat == 0 || out.result[i].inventory.location_lon == 0) {
 				x = ZabbixYaMap.def_lat;
 				y = ZabbixYaMap.def_lon;
+				iconPreset = 'twirl#darkorangeDotIcon';
 			} else {
 				x = out.result[i].inventory.location_lat;
 				y = out.result[i].inventory.location_lon;
+				iconPreset = 'twirl#blueIcon';
 			}
 			if (x > x_max) x_max = x;
 			if (x < x_min) x_min = x;
 			if (y > y_max) y_max = y;
 			if (y < y_min) y_min = y;
-			Hosts[i] = new ymaps.Placemark([ x, y ], {
-				hintContent : out.result[i].name,
-				hostid : out.result[i].hostid
-			}, {
-				draggable : true
-			});
+			Hosts[i] = new ymaps.Placemark(
+					[ x, y ], 
+					{
+						hintContent : out.result[i].name,
+						hostid : out.result[i].hostid
+					},
+					{
+						draggable : true,
+						preset : iconPreset
+					}
+			);
 			(function(i) {
 				Hosts[i].events.add('dragend', function() {
-					draghost(Hosts[i].properties.get('hostid'),
-							Hosts[i].geometry.getCoordinates());
+						draghost(Hosts[i].properties.get('hostid'),	Hosts[i].geometry.getCoordinates());
 					});
 			})(i);
 			HostArray.add(Hosts[i]);

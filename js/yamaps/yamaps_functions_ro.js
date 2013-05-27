@@ -168,7 +168,6 @@ function problems() {
 		dataType: "json",
 		data: query,
 		success : function(out, textStatus, jqXHR) {
-			var out = JSON.parse(jsonReq.responseText);
 			var x_max = 0;
 			var y_max = 0;
 			var x_min = 180;
@@ -281,7 +280,7 @@ function ChangeGroup() {
 		}
 		
 		ZabbixYaMap.Map.geoObjects.add(HostArray);
-		if (PrioProblem === 'false' && x_max != 0) {
+		if (ZabbixYaMap.PrioProblem === 'false' && x_max != 0) {
 			ZabbixYaMap.Map.setBounds([ [ x_min, y_min ], [ x_max, y_max ] ], {
 				duration : 1000,
 				checkZoomRange : true

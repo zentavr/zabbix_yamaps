@@ -152,12 +152,16 @@ function initRO() {
 }
 
 function problems() {
+	console.info("Running problems()");
+	
 	ProblemArray.removeAll();
 	
 	var query = '{"jsonrpc": "2.0","method": "trigger.get","params":{"monitored":"true","expandDescription":"true","min_severity":"'
 		+ minseverity
 		+ '","expandData":"true","output":["description"],"filter":{"value":"1","value_flags":0}},"auth":"'
 		+ ZabbixYaMap.auth() + '","id":1}';
+	console.info("The query will be:");
+	console.log(query);
 	
 	jQuery.ajax({
 		url: "api_jsonrpc.php",
@@ -168,12 +172,22 @@ function problems() {
 		dataType: "json",
 		data: query,
 		success : function(out, textStatus, jqXHR) {
+			console.info("problems():trigger.get response:");
+			console.log(out);
+			
 			var x_max = 0;
 			var y_max = 0;
 			var x_min = 180;
 			var y_min = 180;
 			for (i = 0; i < out.result.length; i++) {
 				(function(i) {
+					var hostQuery = '{"jsonrpc":"2.0","method":"host.get","params":{"hostids":"'
+						+ out.result[i].hostid
+						+ '","selectInventory":["location_lat","location_lon"]},"auth":"'
+						+ ZabbixYaMap.auth() + '","id":' + i + '}';
+					console.info("Doing problems():host.get");
+					console.log(hostQuery);
+					
 					jQuery.ajax({
 						url: "api_jsonrpc.php",
 						type: "POST",
@@ -181,11 +195,11 @@ function problems() {
 						processData : false,
 						async: true,
 						dataType: "json",
-						data: '{"jsonrpc":"2.0","method":"host.get","params":{"hostids":"'
-							+ out.result[i].hostid
-							+ '","selectInventory":["location_lat","location_lon"]},"auth":"'
-							+ ZabbixYaMap.auth() + '","id":' + i + '}',
+						data: ,
 						success : function(data, textStatus, jqXHR) {
+							console.info("problems():host.get response:");
+							console.log(data);
+							
 							if (data.result[0].inventory.location_lat == 0 || data.result[0].inventory.location_lon == 0) {
 								var x = def_lat;
 								var y = def_lon;

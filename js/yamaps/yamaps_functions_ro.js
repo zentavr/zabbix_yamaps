@@ -148,7 +148,7 @@ function initRO() {
 	});
 	ZabbixYaMap.Map.controls.add(FollowProblem);
 	
-	ChangeGroup();
+	//ChangeGroup();
 }
 
 function problems() {
@@ -186,8 +186,7 @@ function problems() {
 							+ '","selectInventory":["location_lat","location_lon"]},"auth":"'
 							+ ZabbixYaMap.auth() + '","id":' + i + '}',
 						success : function(data, textStatus, jqXHR) {
-							if (data.result[0].inventory.location_lat == 0
-									|| data.result[0].inventory.location_lon == 0) {
+							if (data.result[0].inventory.location_lat == 0 || data.result[0].inventory.location_lon == 0) {
 								var x = def_lat;
 								var y = def_lon;
 							} else {

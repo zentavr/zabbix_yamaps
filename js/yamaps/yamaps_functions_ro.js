@@ -114,7 +114,7 @@ function initRO() {
 	}, {
 		position : {
 			top : 5,
-			right : 750
+			right : 820
 		}
 	});
 	for ( var i = 0; i < MinseverityListBox.length(); i++) {

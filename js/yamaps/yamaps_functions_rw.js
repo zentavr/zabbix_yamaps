@@ -80,8 +80,8 @@ function ChangeGroup() {
 		for ( var i = 0; i < out.result.length; i++) {
 			if (out.result[i].inventory.location_lat == 0
 					|| out.result[i].inventory.location_lon == 0) {
-				x = def_lat;
-				y = def_lon;
+				x = ZabbixYaMap.def_lat;
+				y = ZabbixYaMap.def_lon;
 			} else {
 				x = out.result[i].inventory.location_lat;
 				y = out.result[i].inventory.location_lon;

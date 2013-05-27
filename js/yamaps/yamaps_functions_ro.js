@@ -195,7 +195,7 @@ function problems() {
 						processData : false,
 						async: true,
 						dataType: "json",
-						data: ,
+						data: hostQuery,
 						success : function(data, textStatus, jqXHR) {
 							console.info("problems():host.get response:");
 							console.log(data);

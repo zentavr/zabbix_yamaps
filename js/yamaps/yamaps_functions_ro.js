@@ -161,7 +161,13 @@ function problems() {
 	
 	var sel = document.getElementById("selectgroup");
 	var groupid = sel.options[sel.selectedIndex].value;
-	var query = '{"jsonrpc": "2.0","method": "trigger.get","params":{"monitored":"true","groupids":' + groupid + ', "expandDescription":"true","min_severity":"'
+	// if grouid=0, do not add it to the query
+	if(groupid == 0){
+		var groups = '';
+	} else {
+		var groups = '"groupids":' + groupid + ',';
+	}
+	var query = '{"jsonrpc": "2.0","method": "trigger.get","params":{"monitored":"true", ' + groups + '"expandDescription":"true","min_severity":"'
 		+ minseverity
 		+ '","expandData":"true","output":["description"],"filter":{"value":"1","value_flags":0}},"auth":"'
 		+ ZabbixYaMap.auth() + '","id":1}';
@@ -191,8 +197,8 @@ function problems() {
 						+ out.result[i].hostid
 						+ '","selectInventory":["location_lat","location_lon"]},"auth":"'
 						+ ZabbixYaMap.auth() + '","id":' + i + '}';
-					console.info("Doing problems():host.get");
-					console.log(hostQuery);
+					//console.info("Doing problems():host.get");
+					//console.log(hostQuery);
 					
 					jQuery.ajax({
 						url: "api_jsonrpc.php",
@@ -203,8 +209,8 @@ function problems() {
 						dataType: "json",
 						data: hostQuery,
 						success : function(data, textStatus, jqXHR) {
-							console.info("problems():host.get response:");
-							console.log(data);
+							//console.info("problems():host.get response:");
+							//console.log(data);
 							
 							if (data.result[0].inventory.location_lat == 0 || data.result[0].inventory.location_lon == 0) {
 								var x = def_lat;

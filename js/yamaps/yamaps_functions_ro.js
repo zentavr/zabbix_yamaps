@@ -120,7 +120,9 @@ function initRO() {
 	for ( var i = 0; i < MinseverityListBox.length(); i++) {
 		(function(i) {
 			MinseverityListBox.get(i).events.add('click', function() {
+				/* Setting up the minimum severity */
 				minseverity = MinseverityListBox.get(i).data.get('severity');
+				console.log('The min severity is: '+ minseverity);
 				MinseverityListBox.collapse();
 				MinseverityListBox.setTitle('Показать '
 						+ MinseverityListBox.get(i).data.get('content')
@@ -131,8 +133,8 @@ function initRO() {
 	ZabbixYaMap.Map.controls.add(MinseverityListBox);
 	
 	var FollowProblem = new ymaps.control.RadioGroup({
-		items : [ new ymaps.control.Button('Проблемами'),
-				new ymaps.control.Button('Выбором групп') ]
+		items : [ new ymaps.control.Button('Следить за проблемами'),
+				new ymaps.control.Button('Следить за выбором групп') ]
 	}, {
 		position : {
 			top : 5,
@@ -141,10 +143,12 @@ function initRO() {
 	});
 	FollowProblem.get(0).select();
 	FollowProblem.get(0).events.add('click', function() {
-		PrioProblem = 'true';
+		console.log('Setting ZabbixYaMap.PrioProblem to true');
+		ZabbixYaMap.PrioProblem = 'true';
 	});
 	FollowProblem.get(1).events.add('click', function() {
-		PrioProblem = 'false';
+		console.log('Setting ZabbixYaMap.PrioProblem to false');
+		ZabbixYaMap.PrioProblem = 'false';
 	});
 	ZabbixYaMap.Map.controls.add(FollowProblem);
 	
@@ -181,6 +185,7 @@ function problems() {
 			var y_min = 180;
 			for (i = 0; i < out.result.length; i++) {
 				(function(i) {
+					/* Selecting the coordinates */
 					var hostQuery = '{"jsonrpc":"2.0","method":"host.get","params":{"hostids":"'
 						+ out.result[i].hostid
 						+ '","selectInventory":["location_lat","location_lon"]},"auth":"'

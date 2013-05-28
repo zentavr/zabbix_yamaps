@@ -28,11 +28,13 @@ insert_js("
 <?php
 insert_js("
     ymaps.ready(function() {
+		console.log('YandexMaps is starting');
 		YaMap = new ZabbixYaMapRW(".$ZabbixYaMap['latitude'].",
 			                ".$ZabbixYaMap['longitude'].",
 			                ".$ZabbixYaMap['zoom'].",
 			                '".$ZabbixYaMap['maptype']."',
 			                '".$ZabbixYaMap['prioproblem']."');
+		console.log(YaMap);
 		YaMap.init();
     });
 ");

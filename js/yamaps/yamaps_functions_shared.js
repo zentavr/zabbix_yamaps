@@ -17,6 +17,7 @@ ZabbixYaMap.prototype = {
 		
 		/* Constructor */
 		initialize: function(lat, lon, zoom, type, prio) {
+			console.info('ZabbixYaMap.initialize() was called');
 			/* Assign the variables */
 			this.def_lat     = lat;
 			this.def_lon     = lon;

@@ -14,7 +14,7 @@ $page['type']     = detect_page_type(PAGE_TYPE_HTML);
 $page['yaLang'] = YaMapLanguage(CWebUser::$data['lang']);
 
 include_once('include/page_header.php');
-include('include/views/js/configuration.yasmaps.js.php');
+include('include/views/js/configuration.yamaps.js.php');
 
 insert_js("
 	document.write('<select id=\"selectgroup\" onChange=\"ChangeGroup();\"></select>');

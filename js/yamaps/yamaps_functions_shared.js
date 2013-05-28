@@ -54,7 +54,7 @@ var ZabbixYaMap = {
 			}
 			return(setStr);
 		},
-		SetSelect : function(htmlSelect, selected) {
+		SetSelect : function(htmlSelect, selected, allGroupName) {
 			jQuery.ajax({
 				url: "api_jsonrpc.php",
 				type: "POST",
@@ -65,7 +65,7 @@ var ZabbixYaMap = {
 				data: '{"jsonrpc":"2.0","method":"hostgroup.getobjects","params":{},"auth":"' + ZabbixYaMap.auth() + '","id":1}',
 				success : function(data, textStatus, jqXHR) {
 						/* Populate the select box */
-						opt = new Option("Все", 0);
+						opt = new Option(allGroupName, 0);
 		                opt.selected = "selected";
 		                htmlSelect.options.add(opt, 0);
 		                for (i = 0; i < data.result.length; i++) {

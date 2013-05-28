@@ -6,12 +6,12 @@ function initRW() {
 		maxZoom : 9
 	});
 	
-	ZabbixYaMap.SetSelect(document.getElementById("selectgroup"), "Все");
+	ZabbixYaMap.SetSelect(document.getElementById("selectgroup"), "<?php echo _('All'); ?>", "<?php echo _('All'); ?>");
 	
 	SaveButton = new ymaps.control.Button({
 		data : {
-			content : 'Сохранить',
-			title : 'Нажмите для сохранения'
+			content : '<?php echo _('Save'); ?>',
+			title : '<?php echo _('Press to save the positions'); ?>'
 		}
 	}, {
 		position : {

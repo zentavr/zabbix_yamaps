@@ -188,7 +188,7 @@ function problems() {
 	console.log(groups);
 	console.log(query);
 	console.log(query.params.concat(groups));
-	console.log(query.toJSON);
+	console.log(Object.toJSON(query));
 
 	ZabbixYaMap.apiQuery(query.toJSON, function(out){
 		var x_max = 0;

@@ -14,7 +14,7 @@ ZabbixYaMapRW = Object.extend(new ZabbixYaMap(), {
 	 * Initialization of additional controls
 	 */
 	init: function() {
-		
+		console.info('ZabbixYaMapRW.init() was called');
 		this.HostArray = new ymaps.Clusterer({ maxZoom : 9});
 		this.SetSelect(document.getElementById("selectgroup"), "<?php echo _('All'); ?>", "<?php echo _('All'); ?>");
 		

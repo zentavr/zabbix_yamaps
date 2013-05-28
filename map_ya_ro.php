@@ -8,13 +8,13 @@ require_once('yandexapi.conf.php');
 
 $page["title"]    = $ZabbixYaMap['city'];
 $page['file']     = basename(__FILE__);
-$page['hist_arg'] = array();
-$page['scripts']  = array('yamaps_functions_shared.js', 'yamaps_functions_ro.js');
+$page['scripts']  = array('yamaps_functions_shared.js');
 $page['type']     = detect_page_type(PAGE_TYPE_HTML);
 // Detect YandexMaps Language
 $page['yaLang'] = YaMapLanguage(CWebUser::$data['lang']);
 
 include_once('include/page_header.php');
+include('include/views/js/monitoring.yasmaps.js.php');
 
 insert_js("
 	document.write('<select id=\"selectgroup\" onChange=\"ChangeGroup();\"></select>');

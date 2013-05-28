@@ -1,3 +1,4 @@
+<script type="text/javascript">
 function initRW() {
 	Hosts = [];
 	ChangeHost = [];
@@ -121,3 +122,4 @@ function ChangeGroup() {
 		return true;
 	});
 }
+</script>

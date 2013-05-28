@@ -83,32 +83,32 @@ function initRO() {
 		items : [ new ymaps.control.ListBoxItem({
 			data : {
 				severity : 0,
-				content : '<?php echo_('Not classified'); ?>'
+				content : '<?php echo _('Not classified'); ?>'
 			}
 		}), new ymaps.control.ListBoxItem({
 			data : {
 				severity : 1,
-				content : '<?php echo_('Information'); ?>'
+				content : '<?php echo _('Information'); ?>'
 			}
 		}), new ymaps.control.ListBoxItem({
 			data : {
 				severity : 2,
-				content : '<?php echo_('Warning'); ?>'
+				content : '<?php echo _('Warning'); ?>'
 			}
 		}), new ymaps.control.ListBoxItem({
 			data : {
 				severity : 3,
-				content : '<?php echo_('Average'); ?>'
+				content : '<?php echo _('Average'); ?>'
 			}
 		}), new ymaps.control.ListBoxItem({
 			data : {
 				severity : 4,
-				content : '<?php echo_('High'); ?>'
+				content : '<?php echo _('High'); ?>'
 			}
 		}), new ymaps.control.ListBoxItem({
 			data : {
 				severity : 5,
-				content : '<?php echo_('Disaster'); ?>'
+				content : '<?php echo _('Disaster'); ?>'
 			}
 		}) ]
 	}, {

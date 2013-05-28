@@ -17,16 +17,9 @@ include_once('include/page_header.php');
 include('include/views/js/monitoring.yamaps.js.php');
 
 insert_js("
-	document.write('<select id=\"selectgroup\" onChange=\"ChangeGroup();\"></select>');
+	document.write('<select id=\"selectgroup\"></select>');
 	var h = jQuery(window).height() - 180;
 	document.write('<div id=\"map\" style=\"width:100%; height:' + h + 'px\"></div>');
-
-	ZabbixYaMap.def_lat     = ".$ZabbixYaMap['latitude'].";
-	ZabbixYaMap.def_lon     = ".$ZabbixYaMap['longitude'].";
-	ZabbixYaMap.def_zoom    = ".$ZabbixYaMap['zoom']."; 
-	ZabbixYaMap.MapType     = '".$ZabbixYaMap['maptype']."';
-	ZabbixYaMap.PrioProblem = '".$ZabbixYaMap['prioproblem']."';
-
 ");
 
 ?>
@@ -35,8 +28,14 @@ insert_js("
 <?php
 insert_js("
     ymaps.ready(function() {
-		ZabbixYaMap.init();
-		initRO();
+		//console.log('YandexMaps is starting');
+		YaMap = new ZabbixYaMapRO(".$ZabbixYaMap['latitude'].",
+			                ".$ZabbixYaMap['longitude'].",
+			                ".$ZabbixYaMap['zoom'].",
+			                '".$ZabbixYaMap['maptype']."',
+			                '".$ZabbixYaMap['prioproblem']."');
+		//console.log(YaMap);
+		YaMap.init();
     });
 ");
 

@@ -1,4 +1,8 @@
 <script type="text/javascript">
+var ZabbixYaMapRO = Class.create(ZabbixYaMap, {
+
+	
+});
 function initRO() {
 	minseverity = 0;
 	

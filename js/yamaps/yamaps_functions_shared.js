@@ -98,7 +98,7 @@ var ZabbixYaMap = {
 				type: "POST",
 				contentType: "application/json",
 				processData : false,
-				async: false,
+				async: true,
 				dataType: "json",
 				data: query,
 				success : function(data, textStatus, jqXHR) {

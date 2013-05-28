@@ -46,8 +46,6 @@ https://www.zabbix.com/forum/showthread.php?t=37480
 	Add this (probably you need to add the coma above too):
 		
 		// YaMaps
-		'yamaps_functions_ro.js' => 'yamaps',
-		'yamaps_functions_rw.js' => 'yamaps/'
 		'yamaps_functions_shared.js' => 'yamaps/',
 
 - Probably you need to regenerate your Zabbix's locale (i18n) files, if you want to see the text on the buttons on your own language. In order to do so, follow Zabbix instructuions of how to update the locale: https://www.zabbix.com/documentation/2.0/manual/web_interface/translations

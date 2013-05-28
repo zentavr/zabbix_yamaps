@@ -133,8 +133,8 @@ function initRO() {
 	ZabbixYaMap.Map.controls.add(MinseverityListBox);
 	
 	var FollowProblem = new ymaps.control.RadioGroup({
-		items : [ new ymaps.control.Button('Follow the events'),
-				new ymaps.control.Button('Follow the chosen group') ]
+		items : [ new ymaps.control.Button('<?php echo _('Follow the events'); ?>'),
+				new ymaps.control.Button('<?php echo _('Follow the chosen group'); ?>') ]
 	}, {
 		position : {
 			top : 5,

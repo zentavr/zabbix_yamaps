@@ -26,7 +26,7 @@ insert_js("
 	ZabbixYaMap.def_zoom    = ".$ZabbixYaMap['zoom']."; 
 	ZabbixYaMap.MapType     = '".$ZabbixYaMap['maptype']."';
 	ZabbixYaMap.PrioProblem = '".$ZabbixYaMap['prioproblem']."';
-	ZabbixYaMap.isEditable  = false;
+
 ");
 
 ?>

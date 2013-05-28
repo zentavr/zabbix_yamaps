@@ -1,38 +1,57 @@
-// Shared Functions for Zabbix YaMaps
-var ZabbixYaMap = {
+// Shared Class for Zabbix YaMaps
+
+// http://prototypejs.org/doc/latest/language/Class/create/index.html
+// http://prototypejs.org/doc/latest/language/Class/prototype/addMethods/index.html
+// http://prototypejs.org/learn/class-inheritance
+
+var ZabbixYaMap = Class.create();
+
+ZabbixYaMap.prototype = {
 		def_lat     : undefined,
 		def_lon     : undefined,
 		def_zoom    : undefined,
 		MapType     : undefined,
 		PrioProblem : undefined,
-		isEditable  : false,
 		
 		Map         : undefined,
 		
+		/* Constructor */
+		initialize: function(lat, lon, zoom, type, prio) {
+			/* Assign the variables */
+			this.def_lat     = lat;
+			this.def_lon     = lon;
+			this.def_zoom    = zoom;
+			this.MapType     = type;
+			this.PrioProblem = prio;
+			/* Draw the map */
+			this.initMap();
+		},
+		
 		/* Functions */
-		init : function() {
+		
+		initMap : function() {
 			/* Initialize the map */
-			ZabbixYaMap.Map = new ymaps.Map('map', {
-				center : [ ZabbixYaMap.def_lat, ZabbixYaMap.def_lon ],
-				zoom : ZabbixYaMap.def_zoom,
-				type : 'yandex#' + ZabbixYaMap.MapType,
+			this.Map = new ymaps.Map('map', {
+				center : [ this.def_lat, this.def_lon ],
+				zoom : this.def_zoom,
+				type : 'yandex#' + this.MapType,
 				behaviors : [ 'default', 'scrollZoom' ]
 			});
 			
 			/* Add default controls */
-			ZabbixYaMap.Map.controls
+			this.Map.controls
 			        .add('zoomControl')
 			        .add('typeSelector')
 			        .add('mapTools')
 					.add(new ymaps.control.ScaleLine())
 					.add(new ymaps.control.SearchControl({
-								provider : 'yandex#' + ZabbixYaMap.MapType,
+								provider : 'yandex#' + this.MapType,
 								left : '40px',
 								top : '10px',
 								useMapBounds : true
 							}))
 					.add(new ymaps.control.MiniMap({
-								type : 'yandex#' + ZabbixYaMap.MapType
+								type : 'yandex#' + this.MapType
 					}));
 		},
 		

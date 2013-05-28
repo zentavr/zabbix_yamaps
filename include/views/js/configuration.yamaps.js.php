@@ -118,6 +118,8 @@ var ZabbixYaMapRW = Class.create(ZabbixYaMap, {
 
 		console.info('Preparing to do the query');
 		console.log(query);
+		console.log(this);
+		
 		this.apiQuery(query, true, function(out) {
 			var x_max = 0;
 			var y_max = 0;
@@ -125,7 +127,10 @@ var ZabbixYaMapRW = Class.create(ZabbixYaMap, {
 			var y_min = 180;
             console.info('Got the result');
             console.log(out);
+            console.log(this);
 			for ( var i = 0; i < out.result.length; i++) {
+				console.info("'this' in processing results");
+				console.log(this);
 				/* If there is no Lattitude and Longtitude came from Zabbix */
 				if (out.result[i].inventory.location_lat == 0 || out.result[i].inventory.location_lon == 0) {
 					x = this.def_lat;
@@ -152,7 +157,6 @@ var ZabbixYaMapRW = Class.create(ZabbixYaMap, {
 							preset : iconPreset
 						}
 				);
-				console.log(this);
 				console.log(this.Hosts[i]);
 				(function(i) {
 					this.Hosts[i].events.add('dragend', function() {

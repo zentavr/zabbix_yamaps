@@ -152,6 +152,7 @@ var ZabbixYaMapRW = Class.create(ZabbixYaMap, {
 							preset : iconPreset
 						}
 				);
+				console.log(this);
 				console.log(this.Hosts[i]);
 				(function(i) {
 					this.Hosts[i].events.add('dragend', function() {

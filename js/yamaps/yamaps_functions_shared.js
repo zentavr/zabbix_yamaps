@@ -29,6 +29,7 @@ ZabbixYaMap.prototype = {
 		},
 		
 		/* Functions */
+		init : function(){}, // An empty method, should be redefined later
 		
 		initMap : function() {
 			/* Initialize the map */

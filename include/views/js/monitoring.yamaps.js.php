@@ -156,7 +156,7 @@ function initRO() {
 }
 
 function problems() {
-	//console.info("Running problems()");
+	console.info("Running problems()");
 	ProblemArray.removeAll();
 	
 	var sel = document.getElementById("selectgroup");

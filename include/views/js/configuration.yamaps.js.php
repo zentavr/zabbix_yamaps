@@ -14,10 +14,11 @@ var ZabbixYaMapRW = Class.create(ZabbixYaMap, {
 	 */
 	init: function() {
 		console.info('ZabbixYaMapRW.init() was called');
-		this.HostArray = new ymaps.Clusterer({ maxZoom : 9});
-		this.SetSelect(document.getElementById("selectgroup"), "<?php echo _('All'); ?>", "<?php echo _('All'); ?>");
+		var me = this;
+		me.HostArray = new ymaps.Clusterer({ maxZoom : 9});
+		me.SetSelect(document.getElementById("selectgroup"), "<?php echo _('All'); ?>", "<?php echo _('All'); ?>");
 		
-		this.SaveButton = new ymaps.control.Button({
+		me.SaveButton = new ymaps.control.Button({
 			data : {
 				content : '<?php echo _('Save'); ?>',
 				title : '<?php echo _('Press to save the positions'); ?>'
@@ -29,14 +30,14 @@ var ZabbixYaMapRW = Class.create(ZabbixYaMap, {
 			},
 			selectOnClick : false
 		});
-		this.SaveButton.disable();
-		this.Map.controls.add(this.SaveButton);
-		this.saved = false;
+		me.SaveButton.disable();
+		me.Map.controls.add(me.SaveButton);
+		me.saved = false;
 
-		this.ChangeGroup();
+		me.ChangeGroup();
 		// Set up onChange reaction
 		jQuery('#selectgroup').change(function() {
-			this.ChangeGroup();
+			me.ChangeGroup();
 		});
 	},
 
@@ -44,27 +45,28 @@ var ZabbixYaMapRW = Class.create(ZabbixYaMap, {
 	 * Saves the changed hosts
 	 */
 	save_change: function() {
+		var me = this;
 		for (var i = 0; i < this.ChangeHost.length; i++) {
 			
 			var query = {
 					jsonrpc:"2.0",
 					method:"host.update",
 					params: {
-						hostid: this.ChangeHost[i].hid,
+						hostid: me.ChangeHost[i].hid,
 						inventory: {
-							location_lat: this.ChangeHost[i].point[0].toFixed(12),
-							location_lon: this.ChangeHost[i].point[1].toFixed(12)
+							location_lat: me.ChangeHost[i].point[0].toFixed(12),
+							location_lon: me.ChangeHost[i].point[1].toFixed(12)
 						}
 					},
 					id: i
 				};
-			this.apiQuery(query, true, function(){
-				this.ChangeHost.length = 0;
+			me.apiQuery(query, true, function(){
+				me.ChangeHost.length = 0;
 
-				this.SaveButton.disable();
-				this.saved = false;
-				this.SaveButton.events.remove('click', function() {
-			    	this.save_change();
+				me.SaveButton.disable();
+				me.saved = false;
+				me.SaveButton.events.remove('click', function() {
+			    	me.save_change();
 			    });
 			}, 'Cannot save the objects');
 	     }
@@ -75,16 +77,17 @@ var ZabbixYaMapRW = Class.create(ZabbixYaMap, {
 	 */
 	draghost: function(id, newpoint) {
 		// TODO: Check, how many hosts there will be if we'll drag it all the time?? We need only the last value!
-		this.ChangeHost.push(new Object({
+		var me = this;
+		me.ChangeHost.push(new Object({
 			hid: id,
 			point: newpoint
 		}));
 		
-		if (this.saved == false) {
-			this.saved = true;
-			this.SaveButton.enable();
-			this.SaveButton.events.add('click', function() {
-				this.save_change();
+		if (me.saved == false) {
+			me.saved = true;
+			me.SaveButton.enable();
+			me.SaveButton.events.add('click', function() {
+				me.save_change();
 	        });
 	    }
 	},
@@ -93,12 +96,13 @@ var ZabbixYaMapRW = Class.create(ZabbixYaMap, {
 	 */
 	ChangeGroup: function(){
 		console.info('ZabbixYaMapRW.ChangeGroup() was called');
+		var me = this;
 
 		var sel = document.getElementById("selectgroup");
 		var groupid = sel.options[sel.selectedIndex].value;
 
-		this.HostArray.removeAll();
-		this.Map.geoObjects.remove(this.HostArray);
+		me.HostArray.removeAll();
+		me.Map.geoObjects.remove(me.HostArray);
 
 		var query = {
 				jsonrpc: "2.0",
@@ -114,27 +118,26 @@ var ZabbixYaMapRW = Class.create(ZabbixYaMap, {
 		} else {
 			var groups = { groupids: [ groupid ]};
 		}
-		query.params = this.objMerge(query.params, groups);
+		query.params = me.objMerge(query.params, groups);
 
 		console.info('Preparing to do the query');
 		console.log(query);
-		console.log(this);
 		
-		this.apiQuery(query, true, function(out) {
+		me.apiQuery(query, true, function(out) {
 			var x_max = 0;
 			var y_max = 0;
 			var x_min = 180;
 			var y_min = 180;
             console.info('Got the result');
             console.log(out);
-            console.log(this);
+            console.log(me);
 			for ( var i = 0; i < out.result.length; i++) {
 				console.info("'this' in processing results");
-				console.log(this);
+				console.log(me);
 				/* If there is no Lattitude and Longtitude came from Zabbix */
 				if (out.result[i].inventory.location_lat == 0 || out.result[i].inventory.location_lon == 0) {
-					x = this.def_lat;
-					y = this.def_lon;
+					x = me.def_lat;
+					y = me.def_lon;
 					iconPreset = 'twirl#darkorangeDotIcon';
 				} else {
 					x = out.result[i].inventory.location_lat;
@@ -146,7 +149,7 @@ var ZabbixYaMapRW = Class.create(ZabbixYaMap, {
 				if (y > y_max) y_max = y;
 				if (y < y_min) y_min = y;
 				console.info('Defining new host');
-				this.Hosts[i] = new ymaps.Placemark(
+				me.Hosts[i] = new ymaps.Placemark(
 						[ x, y ], 
 						{
 							hintContent : out.result[i].name,
@@ -157,24 +160,24 @@ var ZabbixYaMapRW = Class.create(ZabbixYaMap, {
 							preset : iconPreset
 						}
 				);
-				console.log(this.Hosts[i]);
+				console.log(me.Hosts[i]);
 				(function(i) {
-					this.Hosts[i].events.add('dragend', function() {
-							this.draghost(
-								this.Hosts[i].properties.get('hostid'),	
-								this.Hosts[i].geometry.getCoordinates()
+					me.Hosts[i].events.add('dragend', function() {
+							me.draghost(
+								me.Hosts[i].properties.get('hostid'),	
+								me.Hosts[i].geometry.getCoordinates()
 							);
 						});
 				})(i);
-				this.HostArray.add(this.Hosts[i]);
+				me.HostArray.add(me.Hosts[i]);
 			}
 
 			console.info('ALl the hosts');
-			console.log(this.HostArray);
-			this.Map.geoObjects.add(this.HostArray);
+			console.log(me.HostArray);
+			me.Map.geoObjects.add(me.HostArray);
 						
 			// Zoom the map
-			this.Map.setBounds([ [ x_min, y_min ], [ x_max, y_max ] ], {
+			me.Map.setBounds([ [ x_min, y_min ], [ x_max, y_max ] ], {
 				duration : 1000,
 				checkZoomRange : true
 			});

@@ -140,6 +140,7 @@ var ZabbixYaMapRW = Class.create(ZabbixYaMap, {
 				if (x < x_min) x_min = x;
 				if (y > y_max) y_max = y;
 				if (y < y_min) y_min = y;
+				console.info('Defining new host');
 				this.Hosts[i] = new ymaps.Placemark(
 						[ x, y ], 
 						{
@@ -151,6 +152,7 @@ var ZabbixYaMapRW = Class.create(ZabbixYaMap, {
 							preset : iconPreset
 						}
 				);
+				console.log(this.Hosts[i]);
 				(function(i) {
 					this.Hosts[i].events.add('dragend', function() {
 							this.draghost(
@@ -161,7 +163,9 @@ var ZabbixYaMapRW = Class.create(ZabbixYaMap, {
 				})(i);
 				this.HostArray.add(this.Hosts[i]);
 			}
-			
+
+			console.info('ALl the hosts');
+			console.log(this.HostArray);
 			this.Map.geoObjects.add(this.HostArray);
 						
 			// Zoom the map
@@ -169,7 +173,6 @@ var ZabbixYaMapRW = Class.create(ZabbixYaMap, {
 				duration : 1000,
 				checkZoomRange : true
 			});
-			return true;
 		}, 'Cannot load hosts');
 	}
 // The methods are over :(		

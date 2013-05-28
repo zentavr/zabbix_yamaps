@@ -13,7 +13,7 @@ var ZabbixYaMapRW = Class.create(ZabbixYaMap, {
 	 * Initialization of additional controls
 	 */
 	init: function() {
-		console.info('ZabbixYaMapRW.init() was called');
+		//console.info('ZabbixYaMapRW.init() was called');
 		var me = this;
 		me.HostArray = new ymaps.Clusterer({ maxZoom : 9});
 		me.SetSelect(document.getElementById("selectgroup"), "<?php echo _('All'); ?>", "<?php echo _('All'); ?>");

@@ -92,6 +92,8 @@ var ZabbixYaMapRW = Class.create(ZabbixYaMap, {
 	 * Redisplays the hosts, which are belonged to the certain group
 	 */
 	ChangeGroup: function(){
+		console.info('ZabbixYaMapRW.ChangeGroup() was called');
+
 		var sel = document.getElementById("selectgroup");
 		var groupid = sel.options[sel.selectedIndex].value;
 
@@ -112,7 +114,7 @@ var ZabbixYaMapRW = Class.create(ZabbixYaMap, {
 		} else {
 			var groups = { groupids: [ groupid ]};
 		}
-		query.params = ZabbixYaMap.objMerge(query.params, groups);
+		query.params = this.objMerge(query.params, groups);
 		
 		this.apiQuery(query, true, function(out) {
 			var x_max = 0;

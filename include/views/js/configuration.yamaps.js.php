@@ -30,7 +30,7 @@ function save_change() {
 	for (var i = 0; i < ChangeHost.length; i++) {
 		
 		var query = '{"jsonrpc":"2.0","method":"host.update","params":{"hostid":"' + ChangeHost[i].hid + '","inventory":{"location_lat":"' + ChangeHost[i].point[0].toFixed(12) + '","location_lon":"' + ChangeHost[i].point[1].toFixed(12) + '"}},"auth":"' + ZabbixYaMap.auth() + '","id":' + i + '}';
-		ZabbixYaMap.apiQuery(query, function(){
+		ZabbixYaMap.apiQuery(query, true, function(){
 			ChangeHost.length = 0;
 
 			SaveButton.disable();
@@ -70,7 +70,7 @@ function ChangeGroup() {
 		var query = '{"jsonrpc":"2.0","method":"host.get","params":{"groupids":' + groupid + ',"output":["host","name"],"selectInventory":["location_lat","location_lon"]},"auth":"' + ZabbixYaMap.auth() + '","id":1}';
 	}
 
-	ZabbixYaMap.apiQuery(query, function(out) {
+	ZabbixYaMap.apiQuery(query, true, function(out) {
 		var x_max = 0;
 		var y_max = 0;
 		var x_min = 180;

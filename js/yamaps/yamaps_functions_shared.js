@@ -58,7 +58,7 @@ var ZabbixYaMap = {
 		
 		SetSelect : function(htmlSelect, selected, allGroupName) {
 			var query = '{"jsonrpc":"2.0","method":"hostgroup.getobjects","params":{},"auth":"' + this.auth() + '","id":1}';
-			this.apiQuery(query, function(data){
+			this.apiQuery(query, false, function(data){
 				/* Populate the select box */
 				opt = new Option(allGroupName, 0);
                 opt.selected = "selected";
@@ -74,14 +74,21 @@ var ZabbixYaMap = {
 			}, 'Cannot load host groups');
 			
 		},
-		
-		apiQuery : function(query, callback, errMsg){
+
+		objMerge: function(obj1,obj2){
+		    var obj3 = {};
+		    for (var attrname in obj1) { obj3[attrname] = obj1[attrname]; }
+		    for (var attrname in obj2) { obj3[attrname] = obj2[attrname]; }
+		    return obj3;
+		},
+
+		apiQuery : function(query, async, callback, errMsg){
 			jQuery.ajax({
 				url: "api_jsonrpc.php",
 				type: "POST",
 				contentType: "application/json",
 				processData : false,
-				async: true,
+				async: async,
 				dataType: "json",
 				data: query,
 				success : function(data, textStatus, jqXHR) {

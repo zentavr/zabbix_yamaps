@@ -57,7 +57,12 @@ var ZabbixYaMap = {
 		},
 		
 		SetSelect : function(htmlSelect, selected, allGroupName) {
-			var query = '{"jsonrpc":"2.0","method":"hostgroup.getobjects","params":{},"auth":"' + this.auth() + '","id":1}';
+			var query = {
+					jsonrpc: "2.0",
+					method: "hostgroup.getobjects",
+					params:{},					
+					id: 1
+			};
 			this.apiQuery(query, false, function(data){
 				/* Populate the select box */
 				opt = new Option(allGroupName, 0);
@@ -83,6 +88,7 @@ var ZabbixYaMap = {
 		},
 
 		apiQuery : function(query, async, callback, errMsg){
+			query.auth = this.auth(); // Add the auth token
 			jQuery.ajax({
 				url: "api_jsonrpc.php",
 				type: "POST",
@@ -90,7 +96,7 @@ var ZabbixYaMap = {
 				processData : false,
 				async: async,
 				dataType: "json",
-				data: query,
+				data: Object.toJSON(query),
 				success : function(data, textStatus, jqXHR) {
 					callback(data);
 				},

@@ -168,7 +168,6 @@ function problems() {
 		var groups = { groupids: [ groupid ]};
 	}
 	
-	
 	var query = {
 					jsonrpc: "2.0",
 					method: "trigger.get",
@@ -183,7 +182,6 @@ function problems() {
 							value_flags: 0
 						}
 					},
-					auth: ZabbixYaMap.auth(),
 					id: 1
 			};
 	//console.info("The query will be:");
@@ -191,7 +189,7 @@ function problems() {
 	//console.log(query);
 	query.params = ZabbixYaMap.objMerge(query.params, groups);
 		
-	ZabbixYaMap.apiQuery(Object.toJSON(query), true, function(out){
+	ZabbixYaMap.apiQuery(query, true, function(out){
 		var x_max = 0;
 		var y_max = 0;
 		var x_min = 180;
@@ -199,10 +197,15 @@ function problems() {
 		for (i = 0; i < out.result.length; i++) {
 			(function(i) {
 				// Selecting the coordinates 
-				var hostQuery = '{"jsonrpc":"2.0","method":"host.get","params":{"hostids":"'
-					+ out.result[i].hostid
-					+ '","selectInventory":["location_lat","location_lon"]},"auth":"'
-					+ ZabbixYaMap.auth() + '","id":' + i + '}';
+				var hostQuery = {
+						jsonrpc: "2.0",
+						method: "host.get",
+						params: {
+							hostids: out.result[i].hostid,
+							selectInventory:["location_lat","location_lon"]
+						},
+						id: i
+				};
 				//console.info("Doing problems():host.get");
 				//console.log(hostQuery);
 				ZabbixYaMap.apiQuery(hostQuery, true, function(data){

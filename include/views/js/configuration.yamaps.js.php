@@ -115,12 +115,16 @@ var ZabbixYaMapRW = Class.create(ZabbixYaMap, {
 			var groups = { groupids: [ groupid ]};
 		}
 		query.params = this.objMerge(query.params, groups);
-		
+
+		console.info('Preparing to do the query');
+		console.log(query);
 		this.apiQuery(query, true, function(out) {
 			var x_max = 0;
 			var y_max = 0;
 			var x_min = 180;
 			var y_min = 180;
+            console.info('Got the result');
+            console.log(out);
 			for ( var i = 0; i < out.result.length; i++) {
 				/* If there is no Lattitude and Longtitude came from Zabbix */
 				if (out.result[i].inventory.location_lat == 0 || out.result[i].inventory.location_lon == 0) {

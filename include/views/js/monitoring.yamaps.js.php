@@ -163,105 +163,85 @@ function problems() {
 	var groupid = sel.options[sel.selectedIndex].value;
 	// if grouid=0, do not add it to the query
 	if(groupid == 0){
-		var groups = '';
+		var groups = {};
 	} else {
-		var groups = '"groupids":' + groupid + ',';
+		var groups = {"groupids": groupid };
 	}
-	var query = '{"jsonrpc": "2.0","method": "trigger.get","params":{"monitored":"true", ' + groups + '"expandDescription":"true","min_severity":"'
-		+ minseverity
-		+ '","expandData":"true","output":["description"],"filter":{"value":"1","value_flags":0}},"auth":"'
-		+ ZabbixYaMap.auth() + '","id":1}';
-	//console.info("The query will be:");
-	//console.log(query);
-	
-	jQuery.ajax({
-		url: "api_jsonrpc.php",
-		type: "POST",
-		contentType: "application/json",
-		processData : false,
-		async: true,
-		dataType: "json",
-		data: query,
-		success : function(out, textStatus, jqXHR) {
-			//console.info("problems():trigger.get response:");
-			//console.log(out);
-			
-			var x_max = 0;
-			var y_max = 0;
-			var x_min = 180;
-			var y_min = 180;
-			for (i = 0; i < out.result.length; i++) {
-				(function(i) {
-					/* Selecting the coordinates */
-					var hostQuery = '{"jsonrpc":"2.0","method":"host.get","params":{"hostids":"'
-						+ out.result[i].hostid
-						+ '","selectInventory":["location_lat","location_lon"]},"auth":"'
-						+ ZabbixYaMap.auth() + '","id":' + i + '}';
-					//console.info("Doing problems():host.get");
-					//console.log(hostQuery);
-					
-					jQuery.ajax({
-						url: "api_jsonrpc.php",
-						type: "POST",
-						contentType: "application/json",
-						processData : false,
-						async: true,
-						dataType: "json",
-						data: hostQuery,
-						success : function(data, textStatus, jqXHR) {
-							//console.info("problems():host.get response:");
-							//console.log(data);
-							
-							if (data.result[0].inventory.location_lat == 0 || data.result[0].inventory.location_lon == 0) {
-								var x = def_lat;
-								var y = def_lon;
-							} else {
-								var x = data.result[0].inventory.location_lat;
-								var y = data.result[0].inventory.location_lon;
-							}
-							if (x > x_max) x_max = x;
-							if (x < x_min) x_min = x;
-							if (y > y_max) y_max = y;
-							if (y < y_min) y_min = y;
-							ProblemArray.add(
-									new ymaps.Placemark([ x, y ],{
-											balloonContent : out.result[i].hostname
-															+ '<br>'
-															+ out.result[i].description,
-											iconContent : out.result[i].description
-											// hintContent: out.result[i].hostname
-											// + '<br>' +
-											// out.result[i].description
-									},
-									{
-										preset : 'twirl#redStretchyIcon'
-									}), i);
-							if (ZabbixYaMap.PrioProblem === 'true' && x_max != 0) {
-								ZabbixYaMap.Map.setBounds([ [ x_min, y_min ], [ x_max, y_max ] ], {
-									duration : 1000,
-									checkZoomRange : true
-								});
-							}
-						},
-						error : function( jqXHR, textStatus, errorThrown ) {
-							alert("Cannot load hosts\n\n" + 
-									"Code: " + jqXHR.status + "\n" +
-									"Status: " + jqXHR.statusText + "\n" +
-									"Response: " + jqXHR.responseText);
+	var query = {
+					"jsonrpc": "2.0",
+					"method": "trigger.get",
+					"params":{
+						"monitored":"true",
+						"expandDescription":"true",
+						"min_severity": minseverity,
+						"expandData":"true",
+						"output":["description"],
+						"filter":{
+							"value":"1",
+							"value_flags":0
 						}
-					});	/* Ajax is done */
-				})(i);
-			}
-			ZabbixYaMap.Map.geoObjects.add(ProblemArray);
-		},
-		error : function( jqXHR, textStatus, errorThrown ) {
-			alert("Cannot load hosts\n\n" + 
-					"Code: " + jqXHR.status + "\n" +
-					"Status: " + jqXHR.statusText + "\n" +
-					"Response: " + jqXHR.responseText);
-		}
-	});
+					},
+					"auth": ZabbixYaMap.auth(),
+					"id":1
+				};
+	//console.info("The query will be:");
+	console.log(groups);
+	console.log(query);
+	console.log(query.params.concat(groups));
+	console.log(query.toJSON);
 
+	ZabbixYaMap.apiQuery(query.toJSON, function(out){
+		var x_max = 0;
+		var y_max = 0;
+		var x_min = 180;
+		var y_min = 180;
+		for (i = 0; i < out.result.length; i++) {
+			(function(i) {
+				/* Selecting the coordinates */
+				var hostQuery = '{"jsonrpc":"2.0","method":"host.get","params":{"hostids":"'
+					+ out.result[i].hostid
+					+ '","selectInventory":["location_lat","location_lon"]},"auth":"'
+					+ ZabbixYaMap.auth() + '","id":' + i + '}';
+				//console.info("Doing problems():host.get");
+				//console.log(hostQuery);
+				ZabbixYaMap.apiQuery(hostQuery, function(data){
+					if (data.result[0].inventory.location_lat == 0 || data.result[0].inventory.location_lon == 0) {
+						var x = def_lat;
+						var y = def_lon;
+					} else {
+						var x = data.result[0].inventory.location_lat;
+						var y = data.result[0].inventory.location_lon;
+					}
+					if (x > x_max) x_max = x;
+					if (x < x_min) x_min = x;
+					if (y > y_max) y_max = y;
+					if (y < y_min) y_min = y;
+					ProblemArray.add(
+							new ymaps.Placemark([ x, y ],{
+									balloonContent : out.result[i].hostname
+													+ '<br>'
+													+ out.result[i].description,
+									iconContent : out.result[i].description
+									// hintContent: out.result[i].hostname
+									// + '<br>' +
+									// out.result[i].description
+							},
+							{
+								preset : 'twirl#redStretchyIcon'
+							}), i);
+					if (ZabbixYaMap.PrioProblem === 'true' && x_max != 0) {
+						ZabbixYaMap.Map.setBounds([ [ x_min, y_min ], [ x_max, y_max ] ], {
+							duration : 1000,
+							checkZoomRange : true
+						});
+					}
+				}, 'Cannot load hosts');
+				/* Ajax is done */
+			})(i);
+		}
+		ZabbixYaMap.Map.geoObjects.add(ProblemArray);
+		
+	}, 'Cannot load triggers');
 }
 
 
@@ -273,8 +253,14 @@ function ChangeGroup() {
 	var groupid = sel.options[sel.selectedIndex].value;
 	HostArray.removeAll();
 	ZabbixYaMap.Map.geoObjects.remove(HostArray);
+
+	if (groupid == 0) {
+		var query = '{"jsonrpc":"2.0","method":"host.get","params":{"output":["host","name"],"selectInventory":["location_lat","location_lon"]},"auth":"' + ZabbixYaMap.auth() + '","id":1}';
+	} else {
+		var query = '{"jsonrpc":"2.0","method":"host.get","params":{"groupids":' + groupid + ',"output":["host","name"],"selectInventory":["location_lat","location_lon"]},"auth":"' + ZabbixYaMap.auth() + '","id":1}';
+	}
 	
-	ZabbixYaMap.displayHosts(groupid, function(out) {
+	ZabbixYaMap.apiQuery(query, function(out) {
 		var x_max = 0;
 		var y_max = 0;
 		var x_min = 180;

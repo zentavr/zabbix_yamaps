@@ -35,6 +35,7 @@ var ZabbixYaMap = {
 								type : 'yandex#' + ZabbixYaMap.MapType
 					}));
 		},
+		
 		auth : function() {
 			var cookie = " " + document.cookie;
 			var search = " zbx_sessionid=";
@@ -54,45 +55,27 @@ var ZabbixYaMap = {
 			}
 			return(setStr);
 		},
+		
 		SetSelect : function(htmlSelect, selected, allGroupName) {
-			jQuery.ajax({
-				url: "api_jsonrpc.php",
-				type: "POST",
-				contentType: "application/json",
-				processData : false,
-				async: false,
-				dataType: "json",
-				data: '{"jsonrpc":"2.0","method":"hostgroup.getobjects","params":{},"auth":"' + ZabbixYaMap.auth() + '","id":1}',
-				success : function(data, textStatus, jqXHR) {
-						/* Populate the select box */
-						opt = new Option(allGroupName, 0);
-		                opt.selected = "selected";
-		                htmlSelect.options.add(opt, 0);
-		                for (i = 0; i < data.result.length; i++) {
-		                	opt = new Option(data.result[i].name, data.result[i].groupid);
-		                    if (data.result[i].name === selected) {
-		                    	opt.selected = "selected";
-		                    }
-		                    htmlSelect.options.add(opt, i + 1);
-		                }
-		                return true;                
-				},
-				error : function( jqXHR, textStatus, errorThrown ) {
-					alert("Cannot load host groups\n\n" + 
-							"Code: " + jqXHR.status + "\n" +
-							"Status: " + jqXHR.statusText + "\n" +
-							"Response: " + jqXHR.responseText);
-				}
-			});
+			var query = '{"jsonrpc":"2.0","method":"hostgroup.getobjects","params":{},"auth":"' + this.auth() + '","id":1}';
+			this.apiQuery(query, function(data){
+				/* Populate the select box */
+				opt = new Option(allGroupName, 0);
+                opt.selected = "selected";
+                htmlSelect.options.add(opt, 0);
+                for (i = 0; i < data.result.length; i++) {
+                	opt = new Option(data.result[i].name, data.result[i].groupid);
+                    if (data.result[i].name === selected) {
+                    	opt.selected = "selected";
+                    }
+                    htmlSelect.options.add(opt, i + 1);
+                }
+                return true;
+			}, 'Cannot load host groups');
+			
 		},
-		displayHosts : function(groupid, callback){
-			//console.info(arguments);
-			if (groupid == 0) {
-				var query = '{"jsonrpc":"2.0","method":"host.get","params":{"output":["host","name"],"selectInventory":["location_lat","location_lon"]},"auth":"' + ZabbixYaMap.auth() + '","id":1}';
-			} else {
-				var query = '{"jsonrpc":"2.0","method":"host.get","params":{"groupids":' + groupid + ',"output":["host","name"],"selectInventory":["location_lat","location_lon"]},"auth":"' + ZabbixYaMap.auth() + '","id":1}';
-			}
-			//console.info(query);
+		
+		apiQuery : function(query, callback, errMsg){
 			jQuery.ajax({
 				url: "api_jsonrpc.php",
 				type: "POST",
@@ -105,7 +88,7 @@ var ZabbixYaMap = {
 					callback(data);
 				},
 				error : function( jqXHR, textStatus, errorThrown ) {
-					alert("Cannot load hosts\n\n" + 
+					alert(errMsg + "\n\n" + 
 							"Code: " + jqXHR.status + "\n" +
 							"Status: " + jqXHR.statusText + "\n" +
 							"Response: " + jqXHR.responseText);

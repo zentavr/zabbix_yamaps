@@ -1,0 +1,14 @@
+﻿msgid "Press to save the positions"
+msgstr "Нажмите для сохранения позиций"
+
+msgid "Show all events"
+msgstr "Показать все проблемы"
+
+msgid "and more"
+msgstr "и выше"
+
+msgid "Follow the events"
+msgstr "Следить за проблемами"
+
+msgid "Follow the chosen group"
+msgstr "Следить за группой"

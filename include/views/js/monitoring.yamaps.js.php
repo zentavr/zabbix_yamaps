@@ -68,7 +68,7 @@ function initRO() {
 				}, UpdateListBox.get(i).data.get('time') * 1000);
 				UpdateListBox.collapse();
 				UpdateListBox.setTitle('<?php echo _('refreshed every'); ?> '
-						+ UpdateListBox.get(i).data.get('time') + '<?php echo _('sec'); ?>');
+						+ UpdateListBox.get(i).data.get('time') + ' <?php echo _('sec'); ?>');
 			});
 		})(i);
 	}

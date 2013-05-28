@@ -76,7 +76,7 @@ var ZabbixYaMapRW = Class.create(ZabbixYaMap, {
 	 * Drags the hosts
 	 */
 	draghost: function(id, newpoint) {
-		// TODO: Check, how many hosts there will be if we'll drag it all the time?? We need only the last value!
+		// TODO: FIX, how many hosts there will be if we'll drag it all the time?? We need only the last value!
 		var me = this;
 		me.ChangeHost.push(new Object({
 			hid: id,
@@ -95,7 +95,7 @@ var ZabbixYaMapRW = Class.create(ZabbixYaMap, {
 	 * Redisplays the hosts, which are belonged to the certain group
 	 */
 	ChangeGroup: function(){
-		console.info('ZabbixYaMapRW.ChangeGroup() was called');
+		//console.info('ZabbixYaMapRW.ChangeGroup() was called');
 		var me = this;
 
 		var sel = document.getElementById("selectgroup");
@@ -120,20 +120,20 @@ var ZabbixYaMapRW = Class.create(ZabbixYaMap, {
 		}
 		query.params = me.objMerge(query.params, groups);
 
-		console.info('Preparing to do the query');
-		console.log(query);
+		//console.info('Preparing to do the query');
+		//console.log(query);
 		
 		me.apiQuery(query, true, function(out) {
 			var x_max = 0;
 			var y_max = 0;
 			var x_min = 180;
 			var y_min = 180;
-            console.info('Got the result');
-            console.log(out);
-            console.log(me);
+            //console.info('Got the result');
+            //console.log(out);
+            //console.log(me);
 			for ( var i = 0; i < out.result.length; i++) {
-				console.info("'this' in processing results");
-				console.log(me);
+				//console.info("'this' in processing results");
+				//console.log(me);
 				/* If there is no Lattitude and Longtitude came from Zabbix */
 				if (out.result[i].inventory.location_lat == 0 || out.result[i].inventory.location_lon == 0) {
 					x = me.def_lat;
@@ -148,7 +148,7 @@ var ZabbixYaMapRW = Class.create(ZabbixYaMap, {
 				if (x < x_min) x_min = x;
 				if (y > y_max) y_max = y;
 				if (y < y_min) y_min = y;
-				console.info('Defining new host');
+				//console.info('Defining new host');
 				me.Hosts[i] = new ymaps.Placemark(
 						[ x, y ], 
 						{
@@ -160,7 +160,7 @@ var ZabbixYaMapRW = Class.create(ZabbixYaMap, {
 							preset : iconPreset
 						}
 				);
-				console.log(me.Hosts[i]);
+				//console.log(me.Hosts[i]);
 				(function(i) {
 					me.Hosts[i].events.add('dragend', function() {
 							me.draghost(
@@ -172,8 +172,8 @@ var ZabbixYaMapRW = Class.create(ZabbixYaMap, {
 				me.HostArray.add(me.Hosts[i]);
 			}
 
-			console.info('ALl the hosts');
-			console.log(me.HostArray);
+			//console.info('ALl the hosts');
+			//console.log(me.HostArray);
 			me.Map.geoObjects.add(me.HostArray);
 						
 			// Zoom the map

@@ -1,6 +1,6 @@
 <script type="text/javascript">
 var ZabbixYaMapRW = Class.create();
-ZabbixYaMapRW = Object.extend(new ZabbixYaMap(), {
+ZabbixYaMapRW.prototype = Object.extend(new ZabbixYaMap(), {
 	/* Add variables */
 	Hosts      : [],        // Placemarks
 	ChangeHost : [],        // Contains the changed hosts (e.g. dragged hosts)

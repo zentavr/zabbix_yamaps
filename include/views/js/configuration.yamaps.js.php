@@ -1,5 +1,6 @@
 <script type="text/javascript">
 var ZabbixYaMapRW = Class.create();
+
 ZabbixYaMapRW.prototype = Object.extend(new ZabbixYaMap(), {
 	/* Add variables */
 	Hosts      : [],        // Placemarks
@@ -89,7 +90,9 @@ ZabbixYaMapRW.prototype = Object.extend(new ZabbixYaMap(), {
 	        });
 	    }
 	},
-
+	/**
+	 * Redisplays the hosts, which are belonged to the certain group
+	 */
 	ChangeGroup: function(){
 		var sel = document.getElementById("selectgroup");
 		var groupid = sel.options[sel.selectedIndex].value;
@@ -165,10 +168,7 @@ ZabbixYaMapRW.prototype = Object.extend(new ZabbixYaMap(), {
 			return true;
 		}, 'Cannot load hosts');
 	}
-
-
-
-		
+// The methods are over :(		
 });
 
 </script>

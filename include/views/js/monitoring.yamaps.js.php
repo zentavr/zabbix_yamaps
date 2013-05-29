@@ -10,13 +10,13 @@ var ZabbixYaMapRO = Class.create(ZabbixYaMap, {
 	 */
 	init: function() {
 		var me = this;
-		
+		console.log('inside ZabbixYaMapRO.init()');
 		me.HostArray = new ymaps.Clusterer({ maxZoom : 17 });
 		me.ProblemArray = new ymaps.GeoObjectCollection();
 
 		me.SetSelect(document.getElementById("selectgroup"), "<?php echo _('All'); ?>", "<?php echo _('All'); ?>");
 
-        /* Display the problems */
+		/* Display the problems */
 		me.problems();
 
 		var interval = setInterval(function() {
@@ -171,7 +171,7 @@ var ZabbixYaMapRO = Class.create(ZabbixYaMap, {
 	 * Displays the problems
 	 */
 	problems: function() {
-		//console.info("Running problems()");
+		console.info("Running problems()");
 		var me = this;
 		me.ProblemArray.removeAll();
 		
@@ -190,7 +190,7 @@ var ZabbixYaMapRO = Class.create(ZabbixYaMap, {
 						params: {
 							monitored: true,
 							expandDescription: true,
-							min_severity: minseverity,
+							min_severity: me.minseverity,
 							expandData: true,
 							output: ['description'],
 							filter: {
@@ -200,9 +200,9 @@ var ZabbixYaMapRO = Class.create(ZabbixYaMap, {
 						},
 						id: 1
 				};
-		//console.info("The query will be:");
+		console.info("The query will be:");
 		//console.log(groups);
-		//console.log(query);
+		console.log(query);
 		query.params = me.objMerge(query.params, groups);
 			
 		me.apiQuery(query, true, function(out){
@@ -259,7 +259,7 @@ var ZabbixYaMapRO = Class.create(ZabbixYaMap, {
 					// Ajax is done
 				})(i);
 			}
-			me.Map.geoObjects.add(ProblemArray);
+			me.Map.geoObjects.add(me.ProblemArray);
 			
 		}, 'Cannot load triggers');
 	}

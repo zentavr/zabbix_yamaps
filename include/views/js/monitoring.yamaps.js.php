@@ -248,17 +248,14 @@ var ZabbixYaMapRO = Class.create(ZabbixYaMap, {
 						if (y < y_min) y_min = y;
 						me.ProblemArray.add(
 								new ymaps.Placemark([ x, y ],{
-										balloonContent : out.result[i].hostname
-														+ '<br>'
-														+ out.result[i].description,
-										iconContent : out.result[i].description
-										// hintContent: out.result[i].hostname
-										// + '<br>' +
-										// out.result[i].description
-								},
-								{
-									preset : 'twirl#redStretchyIcon'
-								}), i);
+									balloonContent : out.result[i].hostname
+													+ '<br>'
+													+ out.result[i].description,
+									iconContent : out.result[i].description
+									}, {
+										preset : 'twirl#redStretchyIcon',
+										clusterCaption: out.result[i].hostname
+									}), i);
 						if (me.PrioProblem === 'true' && x_max != 0) {
 							me.Map.setBounds([ [ x_min, y_min ], [ x_max, y_max ] ], {
 								duration : 1000,

@@ -10,7 +10,7 @@ var ZabbixYaMapRO = Class.create(ZabbixYaMap, {
 	 */
 	init: function() {
 		var me = this;
-		console.log('inside ZabbixYaMapRO.init()');
+		//console.log('inside ZabbixYaMapRO.init()');
 		me.HostArray = new ymaps.Clusterer({
 			maxZoom : 17,
 			clusterDisableClickZoom: true,
@@ -180,7 +180,7 @@ var ZabbixYaMapRO = Class.create(ZabbixYaMap, {
 	 * Displays the problems
 	 */
 	problems: function() {
-		console.info("Running problems()");
+		//console.info("Running problems()");
 		var me = this;
 		me.ProblemArray.removeAll();
 		me.Map.geoObjects.remove(me.ProblemArray);
@@ -210,9 +210,9 @@ var ZabbixYaMapRO = Class.create(ZabbixYaMap, {
 						},
 						id: 1
 				};
-		console.info("The query will be:");
+		//console.info("The query will be:");
 		//console.log(groups);
-		console.log(query);
+		//console.log(query);
 		query.params = me.objMerge(query.params, groups);
 			
 		me.apiQuery(query, true, function(out){

@@ -12,7 +12,8 @@ var ZabbixYaMapRO = Class.create(ZabbixYaMap, {
 		var me = this;
 		console.log('inside ZabbixYaMapRO.init()');
 		me.HostArray = new ymaps.Clusterer({ maxZoom : 17 });
-		me.ProblemArray = new ymaps.GeoObjectCollection();
+		//me.ProblemArray = new ymaps.GeoObjectCollection();
+		me.ProblemArray = new ymaps.Clusterer({ maxZoom : 17 });
 
 		me.SetSelect(document.getElementById("selectgroup"), "<?php echo _('All'); ?>", "<?php echo _('All'); ?>");
 
@@ -174,6 +175,7 @@ var ZabbixYaMapRO = Class.create(ZabbixYaMap, {
 		console.info("Running problems()");
 		var me = this;
 		me.ProblemArray.removeAll();
+		me.Map.geoObjects.remove(me.ProblemArray);
 		
 		var sel = document.getElementById("selectgroup");
 		var groupid = sel.options[sel.selectedIndex].value;

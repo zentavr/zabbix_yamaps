@@ -251,10 +251,10 @@ var ZabbixYaMapRO = Class.create(ZabbixYaMap, {
 									balloonContent : out.result[i].hostname
 													+ '<br>'
 													+ out.result[i].description,
-									iconContent : out.result[i].description
+									iconContent : out.result[i].description,
+									clusterCaption: out.result[i].hostname
 									}, {
-										preset : 'twirl#redStretchyIcon',
-										clusterCaption: out.result[i].hostname
+										preset : 'twirl#redStretchyIcon'
 									}), i);
 						if (me.PrioProblem === 'true' && x_max != 0) {
 							me.Map.setBounds([ [ x_min, y_min ], [ x_max, y_max ] ], {

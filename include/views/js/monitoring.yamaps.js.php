@@ -11,9 +11,17 @@ var ZabbixYaMapRO = Class.create(ZabbixYaMap, {
 	init: function() {
 		var me = this;
 		console.log('inside ZabbixYaMapRO.init()');
-		me.HostArray = new ymaps.Clusterer({ maxZoom : 17 });
+		me.HostArray = new ymaps.Clusterer({
+			maxZoom : 17,
+			clusterDisableClickZoom: true,
+			preset: 'twirl#blueClusterIcons'
+		});
 		//me.ProblemArray = new ymaps.GeoObjectCollection();
-		me.ProblemArray = new ymaps.Clusterer({ maxZoom : 17 });
+		me.ProblemArray = new ymaps.Clusterer({ 
+			maxZoom: 17,
+			clusterDisableClickZoom: true,
+			preset: 'twirl#redClusterIcons'
+		});
 
 		me.SetSelect(document.getElementById("selectgroup"), "<?php echo _('All'); ?>", "<?php echo _('All'); ?>");
 
